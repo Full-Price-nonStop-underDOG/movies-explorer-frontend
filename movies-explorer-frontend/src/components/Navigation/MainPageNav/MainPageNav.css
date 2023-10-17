@@ -1,0 +1,42 @@
+.main-page-nav {
+  margin-left: auto;
+}
+.main-page-nav__list-promo {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.main-page-nav__link {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+.main-page-nav__link_login {
+  padding: 8px 20px;
+  color: #fff;
+
+  border-radius: 3px;
+}
+@media (pointer: fine) {
+  .main-page-nav__link:hover {
+    opacity: 0.8;
+  }
+}
+@media screen and (max-width: 767px) {
+  .main-page-nav__link {
+    font-size: 10px;
+  }
+  .main-page-nav__list-promo {
+    gap: 14px;
+  }
+  .main-page-nav__link_login {
+    padding: 5px 12px;
+  }
+}

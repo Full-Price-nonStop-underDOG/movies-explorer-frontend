@@ -1,0 +1,45 @@
+.entryfield {
+  display: flex;
+  flex-direction: column;
+}
+.entryfield__input-name {
+  font-family: 'Inter';
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #8b8b8b;
+  padding-bottom: 5px;
+}
+.entryfield__input {
+  outline: none;
+  background-color: #2f2f2f;
+  min-width: 366px;
+  padding: 15px;
+  font-weight: 400;
+  color: #fff;
+  font-size: 13px;
+  border: none;
+  border-radius: 8px;
+}
+.entryfield__input_type_error {
+  color: #ff3055;
+}
+.entryfield__input:focus {
+  background-color: #535050;
+}
+.entryfield__span-error {
+  padding: 0;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  opacity: 1;
+  color: #ee3465;
+  line-height: normal;
+  min-height: 24px;
+}
+@media screen and (max-width: 767px) {
+  .entryfield__input {
+    min-width: 230px;
+  }
+}
