@@ -5,10 +5,10 @@ import {
   Routes,
   redirect,
 } from 'react-router-dom';
+import './App.css';
 import { Suspense, useEffect, useState } from 'react';
 import { CurrentUserContext } from './contexts/CurrentUserContext';
 import { windowWidth } from './utils/constans';
-import './App.css';
 
 import Preloader from './components/Preloader/Preloader';
 import Main from './components/Main/Main';

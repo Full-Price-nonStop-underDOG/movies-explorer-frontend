@@ -67,6 +67,7 @@
   font-weight: 400;
   line-height: normal;
   background: transparent;
+  text-align: right;
 }
 .profile__span-error:last-of-type {
   min-height: 30px;
