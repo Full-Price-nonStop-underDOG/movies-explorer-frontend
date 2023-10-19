@@ -8,13 +8,13 @@
   width: 100%;
   margin-top: 79px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(271px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   list-style: none;
-  grid-column-gap: 24px;
-  grid-row-gap: 21px;
+  grid-column-gap: 16px;
+  grid-row-gap: 19px;
 }
 .movies-roster__more {
-  margin: 50px 0 80px;
+  margin: 24px 0 47px;
   width: 320px;
   height: 36px;
   font-weight: 500;
@@ -31,9 +31,15 @@
     grid-row-gap: 35px;
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 810px) {
   .movies-roster__net {
-    grid-row-gap: 22px;
+    grid-row-gap: 9px;
+    grid-template-columns: repeat(auto-fit, minmax(339px, 1fr));
+  }
+}
+@media screen and (max-width: 768px) {
+  .movies-roster__more {
+    margin: 2px 0 80px;
   }
 }
 @media screen and (max-width: 400px) {
@@ -41,6 +47,7 @@
     margin-top: 8px;
     padding-top: 40px;
     grid-row-gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
   .movies-roster__more {
     max-width: 240px;

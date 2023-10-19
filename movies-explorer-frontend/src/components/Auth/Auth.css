@@ -5,14 +5,14 @@
 }
 .form__error {
   min-height: 12px;
-  margin: 90px 0 20px;
+  margin: 43px 0 20px;
   color: #ee3465;
   font-weight: 400;
   font-size: 10px;
   text-align: center;
 }
 .form__error_login {
-  margin: 158px 0 20px;
+  margin: 132px 0 20px;
 }
 .form__submit {
   min-width: 396px;
@@ -60,7 +60,7 @@
 }
 @media screen and (max-width: 767px) {
   .form__error {
-    margin: 180px 0 20px;
+    margin: 127px 0 20px;
   }
   .form__link {
     font-size: 12px;
@@ -76,5 +76,11 @@
   .form__link-caption {
     font-size: 12px;
     line-height: 15px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .form__error_login {
+    margin: 223px 0 20px;
   }
 }

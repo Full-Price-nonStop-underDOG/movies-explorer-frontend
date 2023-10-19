@@ -7,9 +7,9 @@ import studentPhoto from '../../../images/studentPhoto.png';
 const AboutMe = () => {
   return (
     <section className='about-me' id='about-me'>
-      <h1 className='about-me__title'>Студент</h1>
-      <section className='about-me__content'>
-        <section className='about-me__info'>
+      <h2 className='about-me__title'>Студент</h2>
+      <div className='about-me__content'>
+        <div className='about-me__info'>
           <h3 className='about-me__name'>Виталий</h3>
           <p className='about-me__job'>Фронтенд-разработчик, 30 лет</p>
           <p className='about-me__text'>
@@ -27,9 +27,9 @@ const AboutMe = () => {
           >
             Github
           </a>
-        </section>
+        </div>
         <img src={studentPhoto} alt='Фотография' className='about-me__photo' />
-      </section>
+      </div>
     </section>
   );
 };

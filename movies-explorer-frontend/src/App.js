@@ -4,6 +4,7 @@ import {
   Router,
   Routes,
   redirect,
+  useNavigate,
 } from 'react-router-dom';
 import './App.css';
 import { Suspense, useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ import { startMovies } from './utils/startMovies';
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [device, setDevice] = useState('desktop');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleWidth = () => {
@@ -40,56 +42,53 @@ function App() {
     return () => window.removeEventListener('resize', handleWidth);
   }, [device]);
 
-  const handleRegister = () => {
-    redirect('/signin');
-  };
-
   const handleLogin = () => {
     setCurrentUser((prev) => ({ ...prev, isLoggedIn: true }));
-    redirect('/movies', { replace: true });
+    navigate('/movies', { replace: true });
+  };
+  const handleRegister = () => {
+    navigate('/signin');
   };
   const handleLogout = () => {
     setCurrentUser((prev) => ({ ...prev, isLoggedIn: false }));
-    redirect('/', { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <BrowserRouter>
-        <Suspense fallback={<Preloader />}>
-          <section className='app'>
-            <Routes>
-              <Route path='/' element={<Main device={device} />} />
-              <Route
-                path='/movies'
-                element={<Movies list={startMovies} device={device} />}
-              />
-              <Route
-                path='/saved-movies'
-                element={<SavedMovies list={startMovies} device={device} />}
-              />
+      <Suspense fallback={<Preloader />}>
+        <section className='app'>
+          <Routes>
+            <Route path='/' element={<Main device={device} />} />
+            <Route
+              path='/movies'
+              element={<Movies list={startMovies} device={device} />}
+            />
+            <Route
+              path='/saved-movies'
+              element={<SavedMovies list={startMovies} device={device} />}
+            />
 
-              <Route
-                path='/signin'
-                element={
-                  <Login onLogin={handleLogin} onRegister={handleRegister} />
-                }
-              />
-              <Route
-                path='/signup'
-                element={
-                  <Register onLogin={handleLogin} onRegister={handleRegister} />
-                }
-              />
-              <Route
-                path='/profile'
-                element={<Profile onLogout={handleLogout} device={device} />}
-              />
-              <Route path='*' element={<NotFound />} />
-            </Routes>
-          </section>
-        </Suspense>
-      </BrowserRouter>
+            <Route
+              path='/signin'
+              element={
+                <Login onLogin={handleLogin} onRegister={handleRegister} />
+              }
+            />
+            <Route
+              path='/signup'
+              element={
+                <Register onLogin={handleLogin} onRegister={handleRegister} />
+              }
+            />
+            <Route
+              path='/profile'
+              element={<Profile onLogout={handleLogout} device={device} />}
+            />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </section>
+      </Suspense>
     </CurrentUserContext.Provider>
   );
 }

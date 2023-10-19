@@ -17,7 +17,7 @@ function SearchForm() {
           className='search-form__input'
           required
         />
-        <button className='search-form__button'></button>
+        <button type='button' className='search-form__button'></button>
       </form>
       <label className='search-form__filter'>
         <input

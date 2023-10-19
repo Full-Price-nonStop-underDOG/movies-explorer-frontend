@@ -18,27 +18,31 @@ function MoviesCard(props) {
 
   const cardLikeOrDislike =
     location.pathname === '/saved-movies'
-      ? 'movie__remove'
+      ? 'movie-card__remove'
       : !isLiked
-      ? 'movie__like'
-      : 'movie__like_active';
+      ? 'movie-card__like'
+      : 'movie-card__like_active';
 
   return (
-    <li className='movie__card'>
-      <section className='movie'>
-        <img className='movie__picture' src={props.card.image} alt='Фильм' />
+    <li className='movie-card__card'>
+      <div className='movie-card'>
+        <img
+          className='movie-card__picture'
+          src={props.card.image}
+          alt='Фильм'
+        />
         <button
           className={cardLikeOrDislike}
           type='button'
           onClick={handleCardLike}
         ></button>
-      </section>
-      <section className='movie__header'>
-        <h2 className='movie__title'>{props.card.nameRU}</h2>
-        <p className='movie__duration'>
+      </div>
+      <div className='movie-card__header'>
+        <h2 className='movie-card__title'>{props.card.nameRU}</h2>
+        <p className='movie-card__duration'>
           {getHoursFromMin(props.card.duration)}
         </p>
-      </section>
+      </div>
     </li>
   );
 }

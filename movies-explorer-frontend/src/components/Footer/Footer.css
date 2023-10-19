@@ -1,5 +1,5 @@
 .footer {
-  padding: 66px 64px 20px;
+  padding: 112px 71px 20px;
   color: #fff;
   background-color: #202020;
 }
@@ -43,14 +43,14 @@
     opacity: 0.7;
   }
 }
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+@media screen and (min-width: 550px) and (max-width: 1024px) {
   .footer {
-    padding: 66px 30px 20px;
+    padding: 77px 30px 20px;
   }
 }
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 550px) {
   .footer {
-    padding: 77px 10px 20px;
+    padding: 58px 10px 20px;
   }
   .footer__title {
     font-size: 12px;

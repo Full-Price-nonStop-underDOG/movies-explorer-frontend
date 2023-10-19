@@ -4,8 +4,8 @@ import './BurgerMenu.css';
 const BurgerMenu = ({ active, onCloseMenu }) => {
   return (
     <section className={active ? 'menu menu_active' : 'menu'}>
-      <section className='menu__hover' onClick={onCloseMenu}>
-        <section className='menu__content' onClick={(e) => e.stopPropagation()}>
+      <div className='menu__hover' onClick={onCloseMenu}>
+        <div className='menu__content' onClick={(e) => e.stopPropagation()}>
           <button
             type='button'
             aria-label='Закрыть'
@@ -13,8 +13,8 @@ const BurgerMenu = ({ active, onCloseMenu }) => {
             onClick={onCloseMenu}
           />
           <NavigationMenu />
-        </section>
-      </section>
+        </div>
+      </div>
     </section>
   );
 };

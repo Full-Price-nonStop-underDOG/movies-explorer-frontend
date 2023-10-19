@@ -111,6 +111,10 @@
   .about-me {
     padding: 70px 14px 70px;
   }
+  .about-me__title {
+    font-size: 18px;
+    padding-bottom: 28px;
+  }
   .about-me__content {
     flex-direction: column-reverse;
     padding-top: 60px;

@@ -8,10 +8,10 @@ function Movies({ list, device }) {
   return (
     <>
       <Header device={device} />
-      <main className='movies'>
+      <section className='movies'>
         <SearchForm />
         <MoviesCardList list={list} />
-      </main>
+      </section>
       <Footer />
     </>
   );

@@ -8,7 +8,7 @@ const Login = ({ onLogin, onRegister }) => {
   return (
     <main className='login'>
       <href onClick={() => navigate('/')} className='login__logo'></href>
-      <h2 className='login__title'>Рады видеть!</h2>
+      <h1 className='login__title'>Рады видеть!</h1>
       <Auth isRegForm={false} onLogin={onLogin} onRegister={onRegister} />
     </main>
   );

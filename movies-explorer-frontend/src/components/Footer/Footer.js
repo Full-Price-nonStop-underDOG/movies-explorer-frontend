@@ -9,7 +9,7 @@ const Footer = () => {
         Учебный проект Яндекс.Практикум х BeatFilm.
       </h2>
       <section className='footer__wrapper'>
-        <p className='footer__copyright'>AT © 2023</p>
+        <p className='footer__copyright'>© 2023</p>
         <ul className='footer__links'>
           <li className='footer__links-element'>
             <Link

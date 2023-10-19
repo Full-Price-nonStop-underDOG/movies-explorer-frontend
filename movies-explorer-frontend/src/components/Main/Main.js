@@ -10,12 +10,14 @@ function Main({ device }) {
   return (
     <>
       <Header device={device}></Header>
-      <Promo></Promo>
-      <AboutProject></AboutProject>
-      <Techs></Techs>
-      <AboutMe></AboutMe>
-      <Portfolio></Portfolio>
-      <Footer></Footer>
+      <main>
+        <Promo></Promo>
+        <AboutProject></AboutProject>
+        <Techs></Techs>
+        <AboutMe></AboutMe>
+        <Portfolio></Portfolio>
+        <Footer></Footer>
+      </main>
     </>
   );
 }

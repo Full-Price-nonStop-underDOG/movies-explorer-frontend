@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   gap: 10px;
+  margin-top: -5px;
 }
 .nav-tab__link {
   display: flex;
@@ -39,5 +40,6 @@
   .nav-tab__links {
     height: 100%;
     align-items: center;
+    margin-top: 3px;
   }
 }

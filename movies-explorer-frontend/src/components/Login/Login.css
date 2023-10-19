@@ -29,10 +29,16 @@
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
   .login {
-    padding: 48px 0 30px;
+    padding: 233px 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .login {
     max-width: 260px;
+    padding: 54px 0 30px;
     min-height: 706px;
   }
   .login__logo {

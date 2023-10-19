@@ -6,11 +6,11 @@ import '../Login/Login.css';
 const Register = ({ onLogin, onRegister }) => {
   const navigate = useNavigate();
   return (
-    <main className='login'>
+    <section className='login'>
       <href onClick={() => navigate('/')} className='login__logo'></href>
-      <h2 className='login__title'>Добро пожаловать!</h2>
+      <h1 className='login__title'>Добро пожаловать!</h1>
       <Auth isRegForm onLogin={onLogin} onRegister={onRegister} />
-    </main>
+    </section>
   );
 };
 

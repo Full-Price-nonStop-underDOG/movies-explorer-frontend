@@ -1,15 +1,15 @@
-.movie__card {
+.movie-card__card {
   width: 100%;
   height: 271px;
   margin: 0;
   padding: 0;
   color: #fff;
 }
-.movie {
+.movie-card {
   position: relative;
   width: 100%;
 }
-.movie__picture {
+.movie-card__picture {
   display: block;
   object-fit: cover;
   object-position: center;
@@ -18,22 +18,23 @@
   width: 100%;
   height: 203px;
 }
-.movie__header {
+.movie-card__header {
   display: flex;
   justify-content: space-between;
   padding: 4px 14px 0 14px;
 }
-.movie__title {
+.movie-card__title {
   display: flex;
   align-items: center;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
   font-size: 13px;
-
+  margin-left: 14px;
+  margin-top: 7px;
   white-space: nowrap;
 }
-.movie__duration {
+.movie-card__duration {
   color: #8b8b8b;
   background-color: #2f2f2f;
   min-width: 52px;
@@ -42,9 +43,9 @@
   padding: 3px 4px;
   border-radius: 3px;
 }
-.movie__like_active {
+.movie-card__like_active {
   position: absolute;
-  top: 15%;
+  top: 12%;
   left: 90%;
   padding: 10.5px 10.5px;
   background-image: url(../../../images/save.svg);
@@ -54,11 +55,11 @@
   cursor: pointer;
   border-radius: 40px;
 }
-.movie__remove {
+.movie-card__remove {
   visibility: hidden;
   position: absolute;
   left: 90%;
-  top: 15%;
+  top: 12%;
   padding: 10.5px 10.5px;
   transform: translate(-50%, -50%);
   background-image: url(../../../images/delete.svg);
@@ -68,7 +69,7 @@
   background-color: #f9f9f9;
   background-position: center;
 }
-.movie__like {
+.movie-card__like {
   border: none;
   background-color: #313131;
   width: 72px;
@@ -76,7 +77,7 @@
   border-radius: 15px;
   visibility: hidden;
   position: absolute;
-  top: 15%;
+  top: 12%;
   left: 86%;
   cursor: pointer;
   transform: translate(-50%, -50%);
@@ -84,72 +85,82 @@
 }
 
 @media (pointer: fine) {
-  .movie__like:hover {
+  .movie-card__like:hover {
     opacity: 0.7;
   }
 }
 @media (pointer: fine) {
-  .movie__remove:hover {
+  .movie-card__remove:hover {
     opacity: 0.7;
   }
 }
 @media screen and (max-width: 1000px) {
-  .movie__picture {
+  .movie-card__picture {
     height: 190px;
   }
-  .movie {
+  .movie-card {
     max-height: 258px;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .movie {
-    max-height: 236px;
+  .movie-card {
+    height: 205px;
   }
-  .movie__remove {
+  .movie-card__remove {
     visibility: visible;
   }
-  .movie__picture {
-    height: 168px;
+  .movie-card__picture {
+    height: 190px;
   }
-  .movie__like {
+  .movie-card__like {
     visibility: visible;
   }
-  .movie__header {
+  .movie-card__header {
     padding: 7px 6px 6px 14px;
   }
-  .movie__duration {
+  .movie-card__duration {
     font-size: 11px;
     margin-top: 0px;
   }
-  .movie__title {
+  .movie-card__title {
     font-size: 12px;
   }
-  .movie__like {
+  .movie-card__like {
     margin-right: 10px;
   }
-  .movie__remove {
+  .movie-card__remove {
     margin-right: 10px;
   }
 }
-@media screen and (max-width: 320px) {
-  .movie {
-    max-height: 220px;
+@media screen and (max-width: 550px) {
+  .movie-card {
+    height: 183px;
   }
-  .movie__header {
-    padding: 10px 0;
+  .movie-card__card {
+    height: 231px;
+  }
+  .movie-card__picture {
+    height: 170px;
+  }
+
+  .movie-card__title {
+    margin-left: 0;
+  }
+  .movie-card__header {
+    padding: 0px 0;
   }
 }
 
-.movie__like::before {
+.movie-card__like::before {
   content: 'Сохранить';
   color: #fff;
 }
-.movie__card:hover .movie__like {
+.movie-card__card:hover .movie-card__like {
   visibility: visible;
   transition: visibility 0.5s;
 }
-.movie__card:hover .movie__remove {
+.movie-card__card:hover .movie-card__remove {
   visibility: visible;
   transition: visibility 0.5s;
 }

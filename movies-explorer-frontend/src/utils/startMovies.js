@@ -9,7 +9,7 @@ export const startMovies = [
   {
     duration: 82,
     image: movie1,
-    nameRU: '1',
+    nameRU: 'Киноальманах «100 лет дизайна»',
     owner: 0,
     id: 1001,
   },
@@ -62,4 +62,25 @@ export const startMovies = [
     owner: 0,
     id: 1008,
   },
+  // {
+  //   duration: 82,
+  //   image: movie1,
+  //   nameRU: 'Киноальманах «100 лет дизайна»',
+  //   owner: 0,
+  //   id: 1009,
+  // },
+  // {
+  //   duration: 82,
+  //   image: movie1,
+  //   nameRU: 'Киноальманах «100 лет дизайна»',
+  //   owner: 0,
+  //   id: 1010,
+  // },
+  // {
+  //   duration: 82,
+  //   image: movie1,
+  //   nameRU: 'Киноальманах «100 лет дизайна»',
+  //   owner: 0,
+  //   id: 1011,
+  // },
 ];

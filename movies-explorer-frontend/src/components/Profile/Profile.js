@@ -31,8 +31,8 @@ const Profile = ({ onLogout, device }) => {
   return (
     <>
       <Header device={device} />
-      <main className='profile'>
-        <h2 className='profile__name'>Привет, {currentUser.name}!</h2>
+      <section className='profile'>
+        <h1 className='profile__name'>Привет, {currentUser.name}!</h1>
         <form name='profile' className='profile__form' onSubmit={handleSubmit}>
           <label className='profile__label'>
             <span className='profile__input-title'>Имя</span>
@@ -95,7 +95,7 @@ const Profile = ({ onLogout, device }) => {
             </>
           )}
         </form>
-      </main>
+      </section>
     </>
   );
 };
