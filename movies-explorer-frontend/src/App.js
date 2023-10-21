@@ -57,7 +57,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Suspense fallback={<Preloader />}>
-        <section className='app'>
+        <div className='app'>
           <Routes>
             <Route path='/' element={<Main device={device} />} />
             <Route
@@ -87,7 +87,7 @@ function App() {
             />
             <Route path='*' element={<NotFound />} />
           </Routes>
-        </section>
+        </div>
       </Suspense>
     </CurrentUserContext.Provider>
   );

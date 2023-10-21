@@ -8,7 +8,7 @@ const Footer = () => {
       <h2 className='footer__title'>
         Учебный проект Яндекс.Практикум х BeatFilm.
       </h2>
-      <section className='footer__wrapper'>
+      <div className='footer__wrapper'>
         <p className='footer__copyright'>© 2023</p>
         <ul className='footer__links'>
           <li className='footer__links-element'>
@@ -30,7 +30,7 @@ const Footer = () => {
             </Link>
           </li>
         </ul>
-      </section>
+      </div>
     </footer>
   );
 };

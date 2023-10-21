@@ -31,7 +31,7 @@
 .form__submit_disabled {
   cursor: not-allowed;
   color: #fff;
-  background-color: #202020;
+  background-color: #272727;
 }
 .form__link-caption {
   text-align: center;

@@ -1,5 +1,6 @@
 .profile {
   min-width: 410px;
+
   padding: 74px 0 70px;
   margin: 0;
   align-items: center;
@@ -58,7 +59,6 @@
   font-weight: 600;
 }
 .profile__span-error {
-  width: 410px;
   min-height: 15px;
   padding: 0;
   color: #ff004c;

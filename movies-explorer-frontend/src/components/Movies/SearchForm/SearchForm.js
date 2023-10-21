@@ -27,7 +27,7 @@ function SearchForm() {
           onChange={handleChange}
         />
         <span className='search-form__tumbler-visible' hidden></span>
-        <p className='search-form__filter-name'>Короткометражки</p>
+        <dl className='search-form__filter-name'>Короткометражки</dl>
       </label>
     </section>
   );

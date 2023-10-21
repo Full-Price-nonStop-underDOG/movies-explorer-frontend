@@ -8,18 +8,18 @@ const AboutProject = () => {
         <h2 className='about__title'>О проекте</h2>
         <ul className='about__info-list'>
           <li className='about__info-elements'>
-            <h2 className='about__info-heading'>
+            <h3 className='about__info-heading'>
               Дипломный проект включал 5 этапов
-            </h2>
+            </h3>
             <p className='about__info-text'>
               Составление плана, работу над бэкендом, вёрстку, добавление
               функциональности и финальные доработки.
             </p>
           </li>
           <li className='about__info-elements'>
-            <h2 className='about__info-heading'>
+            <h3 className='about__info-heading'>
               На выполнение диплома ушло 5 недель
-            </h2>
+            </h3>
             <p className='about__info-text'>
               У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было
               соблюдать, чтобы успешно защититься.

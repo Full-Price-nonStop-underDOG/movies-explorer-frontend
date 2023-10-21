@@ -1,15 +1,15 @@
 .saved-movies {
-  padding: 0 70px 150px 70px;
+  padding: 0 0px 150px 0px;
 
   background-color: #202020;
 }
 @media screen and (max-width: 1280px) {
   .saved-movies {
-    padding: 0 36px 150px 36px;
+    padding: 0 8px 123px 8px;
   }
 }
 @media screen and (max-width: 320px) {
   .saved-movies {
-    padding: 0 15px 140px 15px;
+    padding: 0 0px 140px 0px;
   }
 }

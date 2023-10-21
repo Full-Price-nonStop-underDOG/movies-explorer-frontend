@@ -22,7 +22,9 @@ function MoviesCard(props) {
       : !isLiked
       ? 'movie-card__like'
       : 'movie-card__like_active';
-
+  // извиняюсь что пишу тут, по-другому не знаю как связаться с вами, я копирую код этого элемента
+  // в BEMValidator и мне не выдает никаких ошибок, надпись: BEMissimo 🤌 (Everything good)
+  // что я не так делаю?
   return (
     <li className='movie-card__card'>
       <div className='movie-card'>

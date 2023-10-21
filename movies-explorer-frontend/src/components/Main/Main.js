@@ -16,8 +16,8 @@ function Main({ device }) {
         <Techs></Techs>
         <AboutMe></AboutMe>
         <Portfolio></Portfolio>
-        <Footer></Footer>
       </main>
+      <Footer></Footer>
     </>
   );
 }
