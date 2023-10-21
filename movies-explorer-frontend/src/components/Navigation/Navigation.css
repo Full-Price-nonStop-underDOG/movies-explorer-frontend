@@ -1,0 +1,22 @@
+.header__burger {
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin-left: auto;
+  border: none;
+  background: url(../../images/icon__COLOR_icon-main.svg) no-repeat center;
+  color: #fff;
+}
+@media (pointer: fine) {
+  .header__burger:hover {
+    opacity: 0.8;
+  }
+}
+@media screen and (max-width: 767px) {
+  .header__burger {
+    width: 40px;
+    height: 43px;
+    background-size: 40px 43px;
+  }
+}

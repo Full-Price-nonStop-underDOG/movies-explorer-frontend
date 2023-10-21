@@ -1,0 +1,10 @@
+@import url(./fonts/fonts.css);
+body {
+  margin: 0;
+  background-color: #202020;
+  max-width: 1280px; /* Устанавливаем максимальную ширину */
+  margin: 0 auto;
+  font-family: 'Inter';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
