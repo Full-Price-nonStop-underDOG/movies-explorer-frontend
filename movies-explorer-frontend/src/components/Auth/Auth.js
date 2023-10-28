@@ -12,13 +12,14 @@ const Auth = ({ isRegForm, onLogin, onRegister }) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     resetForm();
-    isRegForm ? onRegister() : onLogin();
+    isRegForm
+      ? onRegister(values.email, values.password, values.forename)
+      : onLogin(values.email, values.password);
   };
 
-  // Задаем свойства для полей ввода
   const nameInputProps = {
     title: 'Имя',
-    name: 'name',
+    name: 'forename',
     handleChange,
     values,
     errors,

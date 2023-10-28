@@ -1,15 +1,20 @@
 import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
   BrowserRouter,
   Route,
   Router,
   Routes,
   redirect,
   useNavigate,
+  useLoaderData,
 } from 'react-router-dom';
 import './App.css';
 import { Suspense, useEffect, useState } from 'react';
-import { CurrentUserContext } from './contexts/CurrentUserContext';
+import { CurrentUserProvider } from './contexts/CurrentUserContext';
 import { windowWidth } from './utils/constans';
+import { useUserData } from './hooks/useUserData';
 
 import Preloader from './components/Preloader/Preloader';
 import Main from './components/Main/Main';
@@ -19,12 +24,15 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import NotFound from './components/NotFound/NotFound';
+import api from './utils/MainApi';
+import MoviesApi from './utils/MoviesApi';
+import ProtectedRouteElement from './utils/ProtectedRoute';
 
-import { startMovies } from './utils/startMovies';
 function App() {
-  const [currentUser, setCurrentUser] = useState({});
+  const [savedMovies, setSavedFilms] = useState([]);
   const [device, setDevice] = useState('desktop');
-  const navigate = useNavigate();
+
+  const { currentUserData, setCurrentUserData, isLoggedIn } = useUserData();
 
   useEffect(() => {
     const handleWidth = () => {
@@ -42,54 +50,98 @@ function App() {
     return () => window.removeEventListener('resize', handleWidth);
   }, [device]);
 
-  const handleLogin = () => {
-    setCurrentUser((prev) => ({ ...prev, isLoggedIn: true }));
-    navigate('/movies', { replace: true });
+  const handleSearchForMovies = (keyword) => {
+    return MoviesApi.makeGetRequest().then((data) => {
+      const filteredMovies = data.reduce((filteredArray, movie) => {
+        const nameRuIncludesKeyword = movie.nameRU
+          .toLowerCase()
+          .includes(keyword.toLowerCase());
+        const nameEnIncludesKeyword = movie.nameEN
+          .toLowerCase()
+          .includes(keyword.toLowerCase());
+        if (nameRuIncludesKeyword || nameEnIncludesKeyword) {
+          return filteredArray.concat(movie);
+        }
+        return filteredArray;
+      }, []);
+
+      return filteredMovies;
+    });
   };
-  const handleRegister = () => {
-    navigate('/signin');
+
+  function handleUpdateUser(userData) {
+    api
+      .editProfileInfo(userData)
+
+      .then((updatedUser) => {
+        const { name, email } = updatedUser; // Извлекаем name и email из ответа сервера
+        setCurrentUserData({ name, email }); // Обновляем currentUserData
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  const handleForSavedMovies = async () => {
+    const user = await api.getUserInfo();
+    const savedMovies = user.savedMovies;
+
+    const savedMoviesList = savedMovies.map((movieId) => {
+      return MoviesApi.getMovieById(movieId);
+    });
+
+    const listOfMovies = await Promise.all(savedMoviesList);
+
+    return listOfMovies;
   };
-  const handleLogout = () => {
-    setCurrentUser((prev) => ({ ...prev, isLoggedIn: false }));
-    navigate('/', { replace: true });
-  };
+
+  const browserRoutes = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path='/' element={<Main device={device} />} />
+        <Route
+          path='/movies'
+          element={
+            <ProtectedRouteElement
+              element={Movies}
+              device={device}
+              handleSearchForMovies={handleSearchForMovies}
+            />
+          }
+        />
+        <Route
+          path='/saved-movies'
+          loader={handleForSavedMovies}
+          element={
+            <ProtectedRouteElement
+              element={SavedMovies}
+              list={savedMovies}
+              device={device}
+            />
+          }
+        />
+        <Route path='/signin' element={<Login />} />
+        <Route path='/signup' element={<Register />} />
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRouteElement
+              element={Profile}
+              device={device}
+              handleUpdateUser={handleUpdateUser}
+            />
+          }
+        />
+        <Route path='*' element={<NotFound />} />
+      </>
+    )
+  );
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserProvider value={currentUserData}>
       <Suspense fallback={<Preloader />}>
-        <div className='app'>
-          <Routes>
-            <Route path='/' element={<Main device={device} />} />
-            <Route
-              path='/movies'
-              element={<Movies list={startMovies} device={device} />}
-            />
-            <Route
-              path='/saved-movies'
-              element={<SavedMovies list={startMovies} device={device} />}
-            />
-
-            <Route
-              path='/signin'
-              element={
-                <Login onLogin={handleLogin} onRegister={handleRegister} />
-              }
-            />
-            <Route
-              path='/signup'
-              element={
-                <Register onLogin={handleLogin} onRegister={handleRegister} />
-              }
-            />
-            <Route
-              path='/profile'
-              element={<Profile onLogout={handleLogout} device={device} />}
-            />
-            <Route path='*' element={<NotFound />} />
-          </Routes>
-        </div>
+        <RouterProvider router={browserRoutes} />
       </Suspense>
-    </CurrentUserContext.Provider>
+    </CurrentUserProvider>
   );
 }
 

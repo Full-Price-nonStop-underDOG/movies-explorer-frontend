@@ -1,19 +1,55 @@
-import { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
+import {
+  handleSaveMovie,
+  handleDeleteMovie,
+} from '../../../utils/likeFunctionality';
+import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
-function MoviesCard(props) {
+function MoviesCard({ card }) {
   const location = useLocation();
   const [isLiked, setLike] = useState(false);
+  const [isCardVisible, setCardVisibility] = useState(true); // Состояние видимости карточки
+  const { currentUserData } = useContext(CurrentUserContext);
 
-  function handleCardLike() {
-    setLike(!isLiked);
-  }
+  useEffect(() => {
+    if (currentUserData) {
+      const isCardSaved = currentUserData.savedMovies.some(
+        (savedMovie) => savedMovie === card.id
+      );
+      setLike(isCardSaved);
+    }
+  }, [currentUserData, card.id]);
+
+  const handleOpenTrailer = () => {
+    if (card.trailerLink) {
+      const youtubeUrl = `https://www.youtube.com/watch?v=${card.trailerLink}`;
+      window.open(youtubeUrl, '_blank');
+    }
+  };
+
+  const handleCardLike = () => {
+    if (location.pathname === '/saved-movies') {
+      handleDeleteMovie(card.id);
+
+      setCardVisibility(false);
+    } else if (!isLiked) {
+      setLike(!isLiked);
+      handleSaveMovie(card.id);
+    }
+  };
 
   function getHoursFromMin(min) {
     let hours = Math.trunc(min / 60);
     let minutes = min % 60;
     return `${hours}ч ${minutes}м`;
+  }
+
+  const absoluteImageUrl = `https://api.nomoreparties.co${card.image.url}`;
+
+  if (!isCardVisible) {
+    return null;
   }
 
   const cardLikeOrDislike =
@@ -22,16 +58,15 @@ function MoviesCard(props) {
       : !isLiked
       ? 'movie-card__like'
       : 'movie-card__like_active';
-  // извиняюсь что пишу тут, по-другому не знаю как связаться с вами, я копирую код этого элемента
-  // в BEMValidator и мне не выдает никаких ошибок, надпись: BEMissimo 🤌 (Everything good)
-  // что я не так делаю?
+
   return (
     <li className='movie-card__card'>
       <div className='movie-card'>
         <img
           className='movie-card__picture'
-          src={props.card.image}
+          src={absoluteImageUrl}
           alt='Фильм'
+          onClick={handleOpenTrailer}
         />
         <button
           className={cardLikeOrDislike}
@@ -40,10 +75,8 @@ function MoviesCard(props) {
         ></button>
       </div>
       <div className='movie-card__header'>
-        <h2 className='movie-card__title'>{props.card.nameRU}</h2>
-        <p className='movie-card__duration'>
-          {getHoursFromMin(props.card.duration)}
-        </p>
+        <h2 className='movie-card__title'>{card.nameRU}</h2>
+        <p className='movie-card__duration'>{getHoursFromMin(card.duration)}</p>
       </div>
     </li>
   );
