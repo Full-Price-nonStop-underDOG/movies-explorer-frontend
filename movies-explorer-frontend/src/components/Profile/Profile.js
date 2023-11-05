@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './Profile.css';
 import Header from '../Header/Header';
 import FormValidation from '../FormValidation/FormValidation';
+import { useLogOut } from '../../hooks/useLogOut';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-const Profile = ({ onLogout, device }) => {
-  const [currentUser, setCurrentUser] = useState({
-    name: 'Виталий',
-    email: 'pochta@yandex.ru',
-  });
+const Profile = ({ onLogout, device, handleUpdateUser }) => {
+  const { currentUserData } = useContext(CurrentUserContext);
+  const [name, setName] = useState(currentUserData.name);
+  const [email, setEmail] = useState(currentUserData.email);
+  const { handleLogOut } = useLogOut();
 
   const initialValues = {
-    name: currentUser.name,
-    email: currentUser.email,
+    name,
+    email,
   };
 
   const { values, errors, isValid, handleChange } =
@@ -19,9 +21,14 @@ const Profile = ({ onLogout, device }) => {
 
   const [serverResError, setServerResError] = useState(false);
   const [isShowSaveButton, setShowSaveButton] = useState(false);
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    setServerResError(true);
+
+    handleUpdateUser({
+      name: values.name,
+      email: values.email,
+    });
   };
 
   const handleEditButtonClick = () => {
@@ -32,7 +39,7 @@ const Profile = ({ onLogout, device }) => {
     <>
       <Header device={device} />
       <section className='profile'>
-        <h1 className='profile__name'>Привет, {currentUser.name}!</h1>
+        <h1 className='profile__name'>Привет, {name}!</h1>
         <form name='profile' className='profile__form' onSubmit={handleSubmit}>
           <label className='profile__label'>
             <span className='profile__input-title'>Имя</span>
@@ -88,7 +95,7 @@ const Profile = ({ onLogout, device }) => {
               <button
                 type='button'
                 className='profile__button profile__button_logout'
-                onClick={onLogout}
+                onClick={handleLogOut}
               >
                 Выйти из аккаунта
               </button>
