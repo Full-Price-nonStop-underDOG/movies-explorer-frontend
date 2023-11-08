@@ -83,21 +83,25 @@ function App() {
       });
   }
   const handleForSavedMovies = async () => {
-    try {
-      const user = await api.getUserInfo();
-      const savedMovies = user.savedMovies;
+    console.log(currentUserData);
+    if (currentUserData.email !== '') {
+      try {
+        const user = await api.getUserInfo();
+        const savedMovies = user.savedMovies;
 
-      const savedMoviesList = savedMovies.map((movieId) => {
-        return MoviesApi.getMovieById(movieId);
-      });
+        const savedMoviesList = savedMovies.map((movieId) => {
+          return MoviesApi.getMovieById(movieId);
+        });
 
-      const listOfMovies = await Promise.all(savedMoviesList);
+        const listOfMovies = await Promise.all(savedMoviesList);
 
-      return listOfMovies;
-    } catch (error) {
-      console.error('Error in handleForSavedMovies:', error);
-      throw error; // Перебросить ошибку для дальнейшей обработки
+        return listOfMovies;
+      } catch (error) {
+        console.error('Error in handleForSavedMovies:', error);
+        throw error; // Перебросить ошибку для дальнейшей обработки
+      }
     }
+    return [];
   };
 
   function checkLoggedIn() {
