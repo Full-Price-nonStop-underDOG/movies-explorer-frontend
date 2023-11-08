@@ -55,18 +55,42 @@ class Api {
     return localStorage.getItem('jwt');
   }
 
-  async checkToken(token) {
+  async checkToken() {
     //const token = this.getToken(); // Получаем токен из localStorage
     try {
       const response = await fetch(`${this._url}/users/me`, {
         method: 'GET',
         headers: {
           ...this._headers,
-          Authorization: `Bearer ${token}`, // Передаем токен в заголовке запроса
+          credentials: 'include',
+          // Передаем токен в заголовке запроса
         },
       });
       const data = await this._handlePromiseRequest(response);
       return data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async signout() {
+    try {
+      const response = await fetch(`${this._url}/signout`, {
+        method: 'POST', // или другой метод, который вы используете на сервере
+        headers: this._headers,
+        credentials: 'include', // Включите передачу кук в запросе
+      });
+
+      if (response.ok) {
+        // Очистите куку на клиенте (если вы храните токен в куке)
+        document.cookie =
+          'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+        // Верните успешный результат выхода
+        return { message: 'Signout successful' };
+      } else {
+        // Если сервер вернул ошибку, обработайте ее здесь
+        throw new Error('ошибка');
+      }
     } catch (error) {
       throw new Error(error);
     }

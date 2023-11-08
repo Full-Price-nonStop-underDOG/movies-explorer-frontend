@@ -11,6 +11,7 @@ import './SavedMovies.css';
 
 function SavedMovies({ device }) {
   const [filteredMovies, setFilteredMovies] = useState([]);
+  const [isLengthCheckboxSet, setIsLengthCheckboxSet] = useState(false);
 
   const movies = useLoaderData();
 
@@ -30,6 +31,7 @@ function SavedMovies({ device }) {
         <SearchForm
           handleSearchForMovies={handleSearchForMovies}
           searchMovies={setFilteredMovies}
+          setIsLengthCheckboxSet={setIsLengthCheckboxSet}
         />
         <MoviesCardList
           list={filteredMovies.length > 0 ? filteredMovies : movies}

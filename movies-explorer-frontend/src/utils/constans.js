@@ -7,8 +7,15 @@ export const elemenetsApi = {
   headers: {
     'Content-Type': 'application/json',
   },
-  URL: 'http://localhost:3001',
+  URL: 'https://api.filmloverbtwwhynot.nomoredomainsrocks.ru',
 };
+
+// export const elemenetsApi = {
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   URL: 'http://localhost:3001',
+// };
 
 export const moviesApi = {
   headers: {

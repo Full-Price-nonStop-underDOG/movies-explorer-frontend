@@ -6,6 +6,13 @@
   border-bottom: 1px solid #424242;
   background-color: #202020;
 }
+.search-form__error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+}
 .search-form__content {
   height: 70px;
   display: flex;

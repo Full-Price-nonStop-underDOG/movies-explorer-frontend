@@ -16,6 +16,11 @@
   display: flex;
   flex-direction: column;
 }
+.profile__success {
+  color: #fff;
+  text-align: center;
+  font-size: 15px;
+}
 .profile__name {
   color: #fff;
   margin: 0;
@@ -110,7 +115,7 @@
 .profile__button_logout {
   margin-top: 16px;
   font-weight: 500;
-  color: #424242;
+  color: #ee3465;
 }
 @media (pointer: fine) {
   .profile__button:hover {

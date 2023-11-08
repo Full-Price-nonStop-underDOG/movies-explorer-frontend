@@ -11,10 +11,15 @@ const Auth = ({ isRegForm, onLogin, onRegister }) => {
   // Обработка отправки формы
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    resetForm();
-    isRegForm
-      ? onRegister(values.email, values.password, values.forename)
-      : onLogin(values.email, values.password);
+
+    if (isValid) {
+      resetForm();
+      isRegForm
+        ? onRegister(values.email, values.password, values.forename)
+        : onLogin(values.email, values.password);
+    } else {
+      // Обработка незаполненных полей (показать ошибку или выполнать другие действия)
+    }
   };
 
   const nameInputProps = {
@@ -49,6 +54,7 @@ const Auth = ({ isRegForm, onLogin, onRegister }) => {
       name={isRegForm ? 'register' : 'login'}
       className='form'
       onSubmit={handleSubmit}
+      noValidate
     >
       {isRegForm && <EntryField {...nameInputProps} />}
       <EntryField {...emailInputProps} />
@@ -57,6 +63,7 @@ const Auth = ({ isRegForm, onLogin, onRegister }) => {
       <button
         type='submit'
         className={`form__submit ${!isValid && 'form__submit_disabled'}`}
+        disabled={!isValid}
       >
         {isRegForm ? 'Зарегистрироваться' : 'Войти'}
       </button>

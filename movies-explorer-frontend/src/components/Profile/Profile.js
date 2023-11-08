@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './Profile.css';
 import Header from '../Header/Header';
 import FormValidation from '../FormValidation/FormValidation';
@@ -6,11 +6,11 @@ import { useLogOut } from '../../hooks/useLogOut';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const Profile = ({ onLogout, device, handleUpdateUser }) => {
+  const [isSubmitEnabled, setSubmitEnabled] = useState(false);
   const { currentUserData } = useContext(CurrentUserContext);
-  const [name, setName] = useState(currentUserData.name);
-  const [email, setEmail] = useState(currentUserData.email);
+  const { name, email } = currentUserData; // Use data from currentUserData directly
+  console.log(currentUserData);
   const { handleLogOut } = useLogOut();
-
   const initialValues = {
     name,
     email,
@@ -21,18 +21,55 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
 
   const [serverResError, setServerResError] = useState(false);
   const [isShowSaveButton, setShowSaveButton] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSubmit = (evt) => {
+  useEffect(() => {
+    // This code will run every time currentUserData changes
+    setSubmitEnabled(isDataChanged());
+    values.name = name; // Update values with the latest data from currentUserData
+    values.email = email;
+  }, [currentUserData]);
+
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    handleUpdateUser({
-      name: values.name,
-      email: values.email,
-    });
+    if (isSubmitEnabled) {
+      try {
+        const response = await handleUpdateUser({
+          name: values.name,
+          email: values.email,
+        });
+
+        if (response.success) {
+          setSuccessMessage('Профиль успешно обновлен');
+          setShowSaveButton(false);
+        } else {
+          setServerResError(true);
+        }
+      } catch (error) {
+        setSuccessMessage('Профиль успешно обновлен');
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3000);
+        setShowSaveButton(false);
+        setServerResError(false);
+      }
+    }
   };
 
   const handleEditButtonClick = () => {
     setShowSaveButton(true);
+  };
+
+  const handleFieldChange = (e) => {
+    handleChange(e);
+  };
+
+  const isDataChanged = () => {
+    return (
+      values.name !== name || // Check for changes in currentUserData
+      values.email !== email
+    );
   };
 
   return (
@@ -40,14 +77,19 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
       <Header device={device} />
       <section className='profile'>
         <h1 className='profile__name'>Привет, {name}!</h1>
-        <form name='profile' className='profile__form' onSubmit={handleSubmit}>
+        <form
+          name='profile'
+          className='profile__form'
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <label className='profile__label'>
             <span className='profile__input-title'>Имя</span>
             <input
               className='profile__input'
               type='text'
               name='name'
-              onChange={handleChange}
+              onChange={handleFieldChange}
               onFocus={handleEditButtonClick}
               value={values.name}
               minLength={2}
@@ -55,16 +97,14 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
               required
             />
           </label>
-
           <span className='profile__span-error'>{errors.name}</span>
-
           <label className='profile__label'>
             <span className='profile__input-title'>E-mail</span>
             <input
               className='profile__input'
               type='email'
               name='email'
-              onChange={handleChange}
+              onChange={handleFieldChange}
               onFocus={handleEditButtonClick}
               value={values.email}
               required
@@ -74,11 +114,12 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
           <p className='profile__error'>
             {serverResError && 'При обновлении профиля произошла ошибка.'}
           </p>
+          <p className='profile__success'>{successMessage}</p>
           {isShowSaveButton ? (
             <button
               type='submit'
               className={`profile__button profile__button_submit ${
-                !isValid && 'profile__button_submit_disabled'
+                !isSubmitEnabled ? 'profile__button_submit_disabled' : ''
               }`}
             >
               Сохранить

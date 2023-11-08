@@ -25,13 +25,10 @@ export function useUserData() {
       });
   }, []);
 
-  useEffect(() => {
-    console.log('senior loggeding', isLoggedIn);
-  }, [isLoggedIn]);
-
   return {
     currentUserData,
     setCurrentUserData,
     isLoggedIn,
+    setIsLoggedIn,
   };
 }

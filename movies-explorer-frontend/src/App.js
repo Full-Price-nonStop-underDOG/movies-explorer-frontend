@@ -32,7 +32,8 @@ function App() {
   const [savedMovies, setSavedFilms] = useState([]);
   const [device, setDevice] = useState('desktop');
 
-  const { currentUserData, setCurrentUserData, isLoggedIn } = useUserData();
+  const { currentUserData, setCurrentUserData, isLoggedIn, setIsLoggedIn } =
+    useUserData();
 
   useEffect(() => {
     const handleWidth = () => {
@@ -82,17 +83,31 @@ function App() {
       });
   }
   const handleForSavedMovies = async () => {
-    const user = await api.getUserInfo();
-    const savedMovies = user.savedMovies;
+    try {
+      const user = await api.getUserInfo();
+      const savedMovies = user.savedMovies;
 
-    const savedMoviesList = savedMovies.map((movieId) => {
-      return MoviesApi.getMovieById(movieId);
-    });
+      const savedMoviesList = savedMovies.map((movieId) => {
+        return MoviesApi.getMovieById(movieId);
+      });
 
-    const listOfMovies = await Promise.all(savedMoviesList);
+      const listOfMovies = await Promise.all(savedMoviesList);
 
-    return listOfMovies;
+      return listOfMovies;
+    } catch (error) {
+      console.error('Error in handleForSavedMovies:', error);
+      throw error; // Перебросить ошибку для дальнейшей обработки
+    }
   };
+
+  function checkLoggedIn() {
+    if (currentUserData.email === '') {
+      return isLoggedIn;
+    } else {
+      setIsLoggedIn(true);
+      return isLoggedIn;
+    }
+  }
 
   const browserRoutes = createBrowserRouter(
     createRoutesFromElements(
@@ -100,8 +115,10 @@ function App() {
         <Route path='/' element={<Main device={device} />} />
         <Route
           path='/movies'
+          loader={checkLoggedIn}
           element={
             <ProtectedRouteElement
+              isLoggedIn={isLoggedIn}
               element={Movies}
               device={device}
               handleSearchForMovies={handleSearchForMovies}
@@ -113,6 +130,7 @@ function App() {
           loader={handleForSavedMovies}
           element={
             <ProtectedRouteElement
+              isLoggedIn={isLoggedIn}
               element={SavedMovies}
               list={savedMovies}
               device={device}
@@ -123,8 +141,10 @@ function App() {
         <Route path='/signup' element={<Register />} />
         <Route
           path='/profile'
+          loader={checkLoggedIn}
           element={
             <ProtectedRouteElement
+              isLoggedIn={isLoggedIn}
               element={Profile}
               device={device}
               handleUpdateUser={handleUpdateUser}

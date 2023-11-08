@@ -11,7 +11,7 @@ export function UserProvider({ children }) {
     // Установите isLoggedIn на true или false на основе аутентификации
 
     // В конце проверки аутентификации
-    setIsLoggedIn(true); // Установите isLoggedIn в true, если аутентификация успешна
+    // Установите isLoggedIn в true, если аутентификация успешна
     setAuthChecked(true); // Установите authChecked в true, когда проверка завершена
   }, []);
 
