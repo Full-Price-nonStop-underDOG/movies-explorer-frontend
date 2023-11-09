@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import Header from '../Header/Header';
@@ -14,9 +14,16 @@ function Movies({ device, handleSearchForMovies }) {
     return movies.filter((movie) => movie.duration <= 40);
   };
 
-  const moviesToDisplay = isLengthCheckboxSet
+  const moviesToDisplay = !isLengthCheckboxSet
     ? filterMoviesByLength(searchResults)
     : searchResults;
+
+  useEffect(() => {
+    // Проверяем localStorage при загрузке компонента
+    const isLengthCheckboxSetFromLocalStorage =
+      localStorage.getItem('isLengthCheckboxSet') === 'true';
+    setIsLengthCheckboxSet(isLengthCheckboxSetFromLocalStorage);
+  }, []);
 
   return (
     <>

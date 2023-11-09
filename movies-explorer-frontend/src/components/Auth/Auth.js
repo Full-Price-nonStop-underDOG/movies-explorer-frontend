@@ -18,7 +18,8 @@ const Auth = ({ isRegForm, onLogin, onRegister }) => {
         ? onRegister(values.email, values.password, values.forename)
         : onLogin(values.email, values.password);
     } else {
-      // Обработка незаполненных полей (показать ошибку или выполнать другие действия)
+      // Если есть ошибки, делаем кнопку сабмита неактивной
+      // или выполняем другие действия в зависимости от вашей логики
     }
   };
 
@@ -62,8 +63,12 @@ const Auth = ({ isRegForm, onLogin, onRegister }) => {
       <p className={`form__error ${!isRegForm && 'form__error_login'}`}></p>
       <button
         type='submit'
-        className={`form__submit ${!isValid && 'form__submit_disabled'}`}
-        disabled={!isValid}
+        className={`form__submit ${
+          !isValid || Object.values(errors).some(Boolean)
+            ? 'form__submit_disabled'
+            : ''
+        }`}
+        disabled={!isValid || Object.values(errors).some(Boolean)}
       >
         {isRegForm ? 'Зарегистрироваться' : 'Войти'}
       </button>

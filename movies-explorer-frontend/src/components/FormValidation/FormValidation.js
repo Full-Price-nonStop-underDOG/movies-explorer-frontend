@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { isEmail } from 'validator';
 
 const FormValidation = (
   initialValues = {},
@@ -10,11 +11,12 @@ const FormValidation = (
   const [isValid, setValid] = useState(initialValid);
 
   const isValidEmail = (email) => {
-    return /\S+@\S+\.\S+/.test(email);
+    return isEmail(email);
   };
 
-  const handleChange = (evt) => {
+  const handleChange = (evt, callback) => {
     const { name, value } = evt.target;
+
     setValues({ ...values, [name]: value });
 
     if (name === 'email') {
@@ -48,6 +50,11 @@ const FormValidation = (
     }
 
     setValid(evt.target.closest('form').checkValidity());
+
+    // Вызывайте колбэк-функцию, если она передана
+    if (callback) {
+      callback();
+    }
   };
 
   const resetForm = useCallback(

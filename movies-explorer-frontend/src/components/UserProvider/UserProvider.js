@@ -7,11 +7,7 @@ export function UserProvider({ children }) {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    // Вместо этого места, ваши проверки аутентификации и установка isLoggedIn
-    // Установите isLoggedIn на true или false на основе аутентификации
-
-    // В конце проверки аутентификации
-    // Установите isLoggedIn в true, если аутентификация успешна
+    setIsLoggedIn(!isLoggedIn);
     setAuthChecked(true); // Установите authChecked в true, когда проверка завершена
   }, []);
 

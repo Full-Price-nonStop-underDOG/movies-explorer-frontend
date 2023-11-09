@@ -1,15 +1,16 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import Header from '../Header/Header';
 import FormValidation from '../FormValidation/FormValidation';
 import { useLogOut } from '../../hooks/useLogOut';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { useUserData } from '../../hooks/useUserData';
 
 const Profile = ({ onLogout, device, handleUpdateUser }) => {
-  const [isSubmitEnabled, setSubmitEnabled] = useState(false);
-  const { currentUserData } = useContext(CurrentUserContext);
-  const { name, email } = currentUserData; // Use data from currentUserData directly
-  console.log(currentUserData);
+  const [isDataChanged, setIsDataChanged] = useState(false);
+
+  const { currentUserData } = useUserData();
+  const { name, email } = currentUserData;
+
   const { handleLogOut } = useLogOut();
   const initialValues = {
     name,
@@ -24,8 +25,9 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    // This code will run every time currentUserData changes
-    setSubmitEnabled(isDataChanged());
+    const dataChanged = checkIfDataChanged();
+    setIsDataChanged(dataChanged);
+
     values.name = name; // Update values with the latest data from currentUserData
     values.email = email;
   }, [currentUserData]);
@@ -33,7 +35,7 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    if (isSubmitEnabled) {
+    if (isDataChanged) {
       try {
         const response = await handleUpdateUser({
           name: values.name,
@@ -62,15 +64,20 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
   };
 
   const handleFieldChange = (e) => {
-    handleChange(e);
+    console.log('handleFieldChange is called');
+    handleChange(e, () => {
+      console.log('сыр');
+      setIsDataChanged(checkIfDataChanged());
+    });
   };
 
-  const isDataChanged = () => {
-    return (
-      values.name !== name || // Check for changes in currentUserData
-      values.email !== email
-    );
+  const checkIfDataChanged = () => {
+    return values.name !== name || values.email !== email;
   };
+
+  useEffect(() => {
+    setIsDataChanged(checkIfDataChanged());
+  }, [values.name, values.email]);
 
   return (
     <>
@@ -119,7 +126,9 @@ const Profile = ({ onLogout, device, handleUpdateUser }) => {
             <button
               type='submit'
               className={`profile__button profile__button_submit ${
-                !isSubmitEnabled ? 'profile__button_submit_disabled' : ''
+                !isValid || !isDataChanged
+                  ? 'profile__button_submit_disabled'
+                  : ''
               }`}
             >
               Сохранить

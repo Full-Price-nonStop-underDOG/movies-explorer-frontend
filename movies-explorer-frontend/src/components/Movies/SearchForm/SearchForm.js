@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './SearchForm.css';
 import { useLocation } from 'react-router-dom';
-import Preloader from '../../Preloader/Preloader'; // Импортируйте компонент прелоадера
+import Preloader from '../../Preloader/Preloader';
 
 function SearchForm({
   handleSearchForMovies,
   searchMovies,
   setIsLengthCheckboxSet,
 }) {
-  const [checked, setChecked] = useState(true);
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [checked, setChecked] = useState(
+    localStorage.getItem('isLengthCheckboxSet') === 'true'
+  );
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Добавьте состояние isLoading
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
+  const [searchKeyword, setSearchKeyword] = useState(
+    location.pathname !== '/saved-movies'
+      ? localStorage.getItem('searchKeyword') || ''
+      : ''
+  );
 
   useEffect(() => {
     const loadStoredSearchKeyword = async () => {
@@ -30,11 +36,12 @@ function SearchForm({
   }, [location]);
 
   const handleChange = () => {
-    setChecked(!checked);
-    if (checked) {
-      setIsLengthCheckboxSet(true);
-    } else {
-      setIsLengthCheckboxSet(false);
+    const newChecked = !checked;
+    setChecked(newChecked);
+
+    if (location.pathname === '/movies') {
+      setIsLengthCheckboxSet(newChecked);
+      localStorage.setItem('isLengthCheckboxSet', newChecked);
     }
   };
 
@@ -45,53 +52,65 @@ function SearchForm({
     } else {
       setError('');
 
-      setIsLoading(true); // Устанавливаем isLoading в true перед загрузкой
+      setIsLoading(true);
       try {
         const results = await handleSearchForMovies(searchKeyword);
         searchMovies(results);
-        localStorage.setItem('searchKeyword', searchKeyword);
+
+        // Проверяем текущий путь, и сохраняем searchKeyword только при /movies
+        if (location.pathname === '/movies') {
+          localStorage.setItem('searchKeyword', searchKeyword);
+        }
       } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
         setError('Произошла ошибка при загрузке данных');
       } finally {
-        setIsLoading(false); // Сбрасываем isLoading после завершения загрузки
+        setIsLoading(false);
       }
     }
   };
 
   return (
     <section className='search-form'>
-      {isLoading ? ( // Проверяем isLoading перед отображением формы или прелоадера
+      {isLoading ? (
         <Preloader />
       ) : (
-        <form
-          className='search-form__content'
-          onSubmit={handleSubmit}
-          noValidate
-        >
-          <input
-            type='text'
-            placeholder='Фильм'
-            className='search-form__input'
-            required
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
+        <>
+          <form
+            className='search-form__content'
+            onSubmit={handleSubmit}
+            noValidate
+          >
+            <input
+              type='text'
+              placeholder='Фильм'
+              className='search-form__input'
+              required
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
 
-          <button type='submit' className='search-form__button'></button>
-        </form>
+            <button type='submit' className='search-form__button'></button>
+          </form>
+
+          {error && <p className='search-form__error'>{error}</p>}
+
+          {searchMovies.length === 0 && !isLoading && (
+            <p className='search-form__not-found'>Ничего не найдено</p>
+          )}
+
+          <label className='search-form__filter'>
+            <input
+              type='checkbox'
+              className='search-form__tumbler'
+              checked={checked}
+              onChange={handleChange}
+            />
+            <span className='search-form__tumbler-visible' hidden></span>
+            <dl className='search-form__filter-name'>Короткометражки</dl>
+          </label>
+        </>
       )}
-      {error && <p className='search-form__error'>{error}</p>}
-      <label className='search-form__filter'>
-        <input
-          type='checkbox'
-          className='search-form__tumbler'
-          checked={checked}
-          onChange={handleChange}
-        />
-        <span className='search-form__tumbler-visible' hidden></span>
-        <dl className='search-form__filter-name'>Короткометражки</dl>
-      </label>
     </section>
   );
 }

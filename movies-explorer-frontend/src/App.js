@@ -83,8 +83,7 @@ function App() {
       });
   }
   const handleForSavedMovies = async () => {
-    console.log(currentUserData);
-    if (currentUserData.email !== '') {
+    if (isLoggedIn) {
       try {
         const user = await api.getUserInfo();
         const savedMovies = user.savedMovies;
@@ -105,13 +104,24 @@ function App() {
   };
 
   function checkLoggedIn() {
-    if (currentUserData.email === '') {
-      return isLoggedIn;
-    } else {
+    console.log(currentUserData.email);
+    if (currentUserData.email !== '') {
       setIsLoggedIn(true);
       return isLoggedIn;
     }
+    return isLoggedIn;
   }
+
+  useEffect(
+    () => {
+      if (currentUserData.email !== '') {
+        setIsLoggedIn(true);
+        return isLoggedIn;
+      }
+    },
+    [],
+    isLoggedIn
+  );
 
   const browserRoutes = createBrowserRouter(
     createRoutesFromElements(

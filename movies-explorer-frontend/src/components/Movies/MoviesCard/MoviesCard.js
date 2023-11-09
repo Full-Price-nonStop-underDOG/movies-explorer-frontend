@@ -14,7 +14,7 @@ function MoviesCard({ card }) {
   const { currentUserData } = useContext(CurrentUserContext);
 
   useEffect(() => {
-    if (currentUserData) {
+    if (currentUserData && currentUserData.savedMovies) {
       const isCardSaved = currentUserData.savedMovies.some(
         (savedMovie) => savedMovie === card.id
       );

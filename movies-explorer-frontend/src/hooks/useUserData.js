@@ -19,6 +19,7 @@ export function useUserData() {
         setIsLoggedIn(true);
         console.log('давай попробуем что-то сделать нахрен', isLoggedIn);
         setCurrentUserData({ email, name, savedMovies, _id });
+        console.log(currentUserData);
       })
       .catch((error) => {
         console.error('Ошибка при получении информации о пользователе', error);
