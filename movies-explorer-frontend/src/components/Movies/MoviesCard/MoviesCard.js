@@ -37,6 +37,9 @@ function MoviesCard({ card }) {
     } else if (!isLiked) {
       setLike(!isLiked);
       handleSaveMovie(card.id);
+    } else {
+      handleDeleteMovie(card.id);
+      setLike(!isLiked);
     }
   };
 

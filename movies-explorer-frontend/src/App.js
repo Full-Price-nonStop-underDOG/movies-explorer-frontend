@@ -9,6 +9,7 @@ import {
   redirect,
   useNavigate,
   useLoaderData,
+  Navigate,
 } from 'react-router-dom';
 import './App.css';
 import { Suspense, useEffect, useState } from 'react';
@@ -146,8 +147,8 @@ function App() {
             />
           }
         />
-        <Route path='/signin' element={<Login />} />
-        <Route path='/signup' element={<Register />} />
+        <Route path='/signin' element={<Login isLoggedIn={isLoggedIn} />} />
+        <Route path='/signup' element={<Register isLoggedIn={isLoggedIn} />} />
         <Route
           path='/profile'
           element={
@@ -168,7 +169,9 @@ function App() {
   return (
     <CurrentUserProvider value={currentUserData}>
       <Suspense fallback={<Preloader />}>
-        <RouterProvider router={browserRoutes} />
+        <RouterProvider router={browserRoutes}>
+          {isLoggedIn && <Navigate to='/' />}
+        </RouterProvider>
       </Suspense>
     </CurrentUserProvider>
   );

@@ -3,12 +3,12 @@ export const windowWidth = {
   mobile: 480,
 };
 
-// export const elemenetsApi = {
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   URL: 'https://api.filmloverbtwwhynot.nomoredomainsrocks.ru',
-// };
+//  export const elemenetsApi = {
+//    headers: {
+//      'Content-Type': 'application/json',
+//    },
+//    URL: 'https://api.filmloverbtwwhynot.nomoredomainsrocks.ru',
+//  };
 
 export const elemenetsApi = {
   headers: {

@@ -6,11 +6,17 @@ import { useLogin } from '../../hooks/useLogin';
 import { useRegister } from '../../hooks/useRegister';
 import { useEffect } from 'react';
 
-const Register = () => {
+const Register = ({ isLoggedIn }) => {
   const navigate = useNavigate();
   // const { login } = useLogin();
   const login = () => {};
   const { handleRegister } = useRegister();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <section className='login'>

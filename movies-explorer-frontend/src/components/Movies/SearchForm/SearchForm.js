@@ -30,11 +30,19 @@ function SearchForm({
         setChecked(storedCheckboxStatus === 'true');
 
         if (storedSearchKeyword && storedSearchKeyword.trim() !== '') {
-          // Call handleSearchForMovies directly instead of using a callback
-          const results = await handleSearchForMovies(storedSearchKeyword);
-          searchMovies(() => results);
+          // Check if searchResults are already present in local storage
+          const storedSearchResults = JSON.parse(
+            localStorage.getItem('searchResults')
+          );
+
+          if (storedSearchResults) {
+            searchMovies(() => storedSearchResults);
+          } else {
+            // If not present, make a new request
+            const results = await handleSearchForMovies(storedSearchKeyword);
+            searchMovies(() => results);
+          }
         } else if (storedSearchResults) {
-          // Pass storedSearchResults directly to searchMovies
           searchMovies(() => storedSearchResults);
         }
       }
