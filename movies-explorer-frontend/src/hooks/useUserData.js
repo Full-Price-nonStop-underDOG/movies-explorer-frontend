@@ -10,26 +10,31 @@ export function useUserData() {
   });
 
   const { setIsLoggedIn, isLoggedIn } = useUserContext();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userData) => {
+    const fetchData = async () => {
+      try {
+        const userData = await api.getUserInfo();
         const { email, name, savedMovies, _id } = userData;
-        setIsLoggedIn(true);
-        console.log('давай попробуем что-то сделать нахрен', isLoggedIn);
         setCurrentUserData({ email, name, savedMovies, _id });
-        console.log(currentUserData);
-      })
-      .catch((error) => {
-        console.error('Ошибка при получении информации о пользователе', error);
-      });
-  }, []);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setIsLoggedIn(false); // Убедитесь, что isLoggedIn устанавливается в false в случае ошибки
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [setIsLoggedIn, setCurrentUserData]);
 
   return {
     currentUserData,
     setCurrentUserData,
     isLoggedIn,
     setIsLoggedIn,
+    isLoading,
   };
 }

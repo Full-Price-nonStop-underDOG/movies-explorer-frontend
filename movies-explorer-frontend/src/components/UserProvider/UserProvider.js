@@ -4,15 +4,9 @@ const MyContext = createContext();
 
 export function UserProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
-
-  useEffect(() => {
-    setIsLoggedIn(!isLoggedIn);
-    setAuthChecked(true); // Установите authChecked в true, когда проверка завершена
-  }, []);
 
   return (
-    <MyContext.Provider value={{ isLoggedIn, setIsLoggedIn, authChecked }}>
+    <MyContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
       {children}
     </MyContext.Provider>
   );

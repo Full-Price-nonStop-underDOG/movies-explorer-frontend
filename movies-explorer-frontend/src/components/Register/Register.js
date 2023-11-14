@@ -4,12 +4,14 @@ import Auth from '../Auth/Auth';
 import '../Login/Login.css';
 import { useLogin } from '../../hooks/useLogin';
 import { useRegister } from '../../hooks/useRegister';
+import { useEffect } from 'react';
 
 const Register = () => {
   const navigate = useNavigate();
   // const { login } = useLogin();
   const login = () => {};
   const { handleRegister } = useRegister();
+
   return (
     <section className='login'>
       <href onClick={() => navigate('/')} className='login__logo'></href>

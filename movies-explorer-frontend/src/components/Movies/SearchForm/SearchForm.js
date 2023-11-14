@@ -8,32 +8,46 @@ function SearchForm({
   searchMovies,
   setIsLengthCheckboxSet,
 }) {
-  const [checked, setChecked] = useState(
-    localStorage.getItem('isLengthCheckboxSet') === 'true'
-  );
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [checked, setChecked] = useState(true);
+  const [showNotFoundMessage, setShowNotFoundMessage] = useState(false);
   const location = useLocation();
-  const [searchKeyword, setSearchKeyword] = useState(
-    location.pathname !== '/saved-movies'
-      ? localStorage.getItem('searchKeyword') || ''
-      : ''
-  );
 
   useEffect(() => {
-    const loadStoredSearchKeyword = async () => {
-      const storedSearchKeyword = await localStorage.getItem('searchKeyword');
-      setSearchKeyword(storedSearchKeyword || '');
+    let isMounted = true;
 
-      if (storedSearchKeyword && storedSearchKeyword.trim() !== '') {
-        handleSubmit();
+    const loadStoredSearchData = async () => {
+      const storedSearchKeyword = await localStorage.getItem('searchKeyword');
+      const storedCheckboxStatus = localStorage.getItem('isLengthCheckboxSet');
+      const storedSearchResults = JSON.parse(
+        localStorage.getItem('searchResults')
+      );
+
+      if (isMounted) {
+        setSearchKeyword(storedSearchKeyword || '');
+        setChecked(storedCheckboxStatus === 'true');
+
+        if (storedSearchKeyword && storedSearchKeyword.trim() !== '') {
+          // Call handleSearchForMovies directly instead of using a callback
+          const results = await handleSearchForMovies(storedSearchKeyword);
+          searchMovies(() => results);
+        } else if (storedSearchResults) {
+          // Pass storedSearchResults directly to searchMovies
+          searchMovies(() => storedSearchResults);
+        }
       }
     };
 
     if (location.pathname === '/movies') {
-      loadStoredSearchKeyword();
+      loadStoredSearchData();
     }
-  }, [location]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleChange = () => {
     const newChecked = !checked;
@@ -49,17 +63,26 @@ function SearchForm({
     event?.preventDefault();
     if (searchKeyword.trim() === '' && !localStorage.getItem('searchKeyword')) {
       setError('Нужно ввести ключевое слово');
+      setShowNotFoundMessage(false); // Reset the not found message state
     } else {
       setError('');
-
       setIsLoading(true);
       try {
         const results = await handleSearchForMovies(searchKeyword);
-        searchMovies(results);
+        searchMovies(() => results);
 
-        // Проверяем текущий путь, и сохраняем searchKeyword только при /movies
+        if (results.length === 0) {
+          setShowNotFoundMessage(true);
+
+          setTimeout(() => {
+            setShowNotFoundMessage(false);
+          }, 5000);
+        }
+
         if (location.pathname === '/movies') {
           localStorage.setItem('searchKeyword', searchKeyword);
+          localStorage.setItem('searchResults', JSON.stringify(results));
+          localStorage.setItem('isLengthCheckboxSet', checked.toString());
         }
       } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
@@ -80,6 +103,7 @@ function SearchForm({
             className='search-form__content'
             onSubmit={handleSubmit}
             noValidate
+            id='plz'
           >
             <input
               type='text'
@@ -89,13 +113,12 @@ function SearchForm({
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
-
             <button type='submit' className='search-form__button'></button>
           </form>
 
           {error && <p className='search-form__error'>{error}</p>}
 
-          {searchMovies.length === 0 && !isLoading && (
+          {showNotFoundMessage && (
             <p className='search-form__not-found'>Ничего не найдено</p>
           )}
 

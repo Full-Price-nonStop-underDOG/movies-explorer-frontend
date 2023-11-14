@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
+import { useLoaderData } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import './Movies.css';
@@ -19,7 +20,6 @@ function Movies({ device, handleSearchForMovies }) {
     : searchResults;
 
   useEffect(() => {
-    // Проверяем localStorage при загрузке компонента
     const isLengthCheckboxSetFromLocalStorage =
       localStorage.getItem('isLengthCheckboxSet') === 'true';
     setIsLengthCheckboxSet(isLengthCheckboxSetFromLocalStorage);

@@ -32,41 +32,55 @@ function App() {
   const [savedMovies, setSavedFilms] = useState([]);
   const [device, setDevice] = useState('desktop');
 
-  const { currentUserData, setCurrentUserData, isLoggedIn, setIsLoggedIn } =
-    useUserData();
+  const {
+    currentUserData,
+    setCurrentUserData,
+    isLoggedIn,
+    setIsLoggedIn,
+    isLoading,
+  } = useUserData();
 
-  useEffect(() => {
-    const handleWidth = () => {
-      if (window.innerWidth > windowWidth.tablet) {
-        setDevice('desktop');
-      } else if (window.innerWidth > windowWidth.mobile) {
-        setDevice('tablet');
-      } else {
-        setDevice('mobile');
-      }
-    };
-    handleWidth();
-    window.addEventListener('resize', handleWidth);
+  useEffect(
+    () => {
+      const handleWidth = () => {
+        if (window.innerWidth > windowWidth.tablet) {
+          setDevice('desktop');
+        } else if (window.innerWidth > windowWidth.mobile) {
+          setDevice('tablet');
+        } else {
+          setDevice('mobile');
+        }
+      };
+      handleWidth();
+      window.addEventListener('resize', handleWidth);
 
-    return () => window.removeEventListener('resize', handleWidth);
-  }, [device]);
+      return () => window.removeEventListener('resize', handleWidth);
+    },
+    [device],
+    []
+  );
 
   const handleSearchForMovies = (keyword) => {
-    return MoviesApi.makeGetRequest().then((data) => {
-      const filteredMovies = data.reduce((filteredArray, movie) => {
-        const nameRuIncludesKeyword = movie.nameRU
-          .toLowerCase()
-          .includes(keyword.toLowerCase());
-        const nameEnIncludesKeyword = movie.nameEN
-          .toLowerCase()
-          .includes(keyword.toLowerCase());
-        if (nameRuIncludesKeyword || nameEnIncludesKeyword) {
-          return filteredArray.concat(movie);
-        }
-        return filteredArray;
-      }, []);
-
-      return filteredMovies;
+    return new Promise((resolve, reject) => {
+      try {
+        MoviesApi.makeGetRequest().then((data) => {
+          const filteredMovies = data.reduce((filteredArray, movie) => {
+            const nameRuIncludesKeyword = movie.nameRU
+              .toLowerCase()
+              .includes(keyword.toLowerCase());
+            const nameEnIncludesKeyword = movie.nameEN
+              .toLowerCase()
+              .includes(keyword.toLowerCase());
+            if (nameRuIncludesKeyword || nameEnIncludesKeyword) {
+              return filteredArray.concat(movie);
+            }
+            return filteredArray;
+          }, []);
+          resolve(filteredMovies);
+        });
+      } catch (error) {
+        reject(error);
+      }
     });
   };
 
@@ -103,35 +117,15 @@ function App() {
     return [];
   };
 
-  function checkLoggedIn() {
-    console.log(currentUserData.email);
-    if (currentUserData.email !== '') {
-      setIsLoggedIn(true);
-      return isLoggedIn;
-    }
-    return isLoggedIn;
-  }
-
-  useEffect(
-    () => {
-      if (currentUserData.email !== '') {
-        setIsLoggedIn(true);
-        return isLoggedIn;
-      }
-    },
-    [],
-    isLoggedIn
-  );
-
   const browserRoutes = createBrowserRouter(
     createRoutesFromElements(
       <>
         <Route path='/' element={<Main device={device} />} />
         <Route
           path='/movies'
-          loader={checkLoggedIn}
           element={
             <ProtectedRouteElement
+              isLoading={isLoading}
               isLoggedIn={isLoggedIn}
               element={Movies}
               device={device}
@@ -144,6 +138,7 @@ function App() {
           loader={handleForSavedMovies}
           element={
             <ProtectedRouteElement
+              isLoading={isLoading}
               isLoggedIn={isLoggedIn}
               element={SavedMovies}
               list={savedMovies}
@@ -155,9 +150,9 @@ function App() {
         <Route path='/signup' element={<Register />} />
         <Route
           path='/profile'
-          loader={checkLoggedIn}
           element={
             <ProtectedRouteElement
+              isLoading={isLoading}
               isLoggedIn={isLoggedIn}
               element={Profile}
               device={device}

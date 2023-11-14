@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
+import { useLocation } from 'react-router-dom';
 
 function MoviesCardList({ list, device }) {
+  const location = useLocation();
+  const isSavedMoviesPage = location.pathname === '/saved-movies';
+
   const [visibleCards, setVisibleCards] = useState(4);
-  const [loadMoreCards, setLoadMoreCards] = useState(2);
+  const [initialVisibleCards, setInitialVisibleCards] = useState(4);
 
   const handleResize = () => {
     if (device === 'desktop') {
-      setVisibleCards(12);
-      setLoadMoreCards(3);
+      setInitialVisibleCards(12);
     } else if (device === 'tablet') {
-      setVisibleCards(8);
-      setLoadMoreCards(2);
+      setInitialVisibleCards(8);
     } else {
-      setVisibleCards(5);
-      setLoadMoreCards(2);
+      setInitialVisibleCards(5);
     }
   };
 
@@ -28,25 +29,37 @@ function MoviesCardList({ list, device }) {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [device]);
 
-  const handleLoadMore = () => {
-    setVisibleCards((prevVisible) => prevVisible + loadMoreCards);
-  };
+  useEffect(() => {
+    setVisibleCards(initialVisibleCards);
+  }, [list, initialVisibleCards]);
+
+  useEffect(() => {
+    if (isSavedMoviesPage) {
+      // Если находимся на странице "Сохраненные фильмы", показываем все карточки
+      setVisibleCards(list.length);
+    } else {
+      // Иначе, применяем логику для страницы "Фильмы"
+      setVisibleCards(initialVisibleCards);
+    }
+  }, [list, initialVisibleCards, isSavedMoviesPage]);
 
   return (
     <section className='movies-roster'>
       <ul className='movies-roster__net'>
-        {list.slice(0, visibleCards).map((item) => (
-          <MoviesCard key={item.id} card={item} />
-        ))}
+        {list && list.length > 0 ? (
+          list.map((item) => <MoviesCard key={item.id} card={item} />)
+        ) : (
+          <p>No movies to display</p>
+        )}
       </ul>
-      {visibleCards < list.length && (
+      {isSavedMoviesPage && visibleCards < list.length && (
         <button
           className='movies-roster__more'
           type='button'
           aria-label='Ещё'
-          onClick={handleLoadMore}
+          onClick={() => setVisibleCards(list.length)}
         >
           Ещё
         </button>

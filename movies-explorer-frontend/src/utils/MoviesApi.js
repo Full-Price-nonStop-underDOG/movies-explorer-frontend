@@ -11,7 +11,7 @@ class BeatMoviesApi {
     } else throw new Error('ошибка');
   }
 
-  async makeGetRequest(endpoint) {
+  async makeGetRequest() {
     const response = await fetch(`${this._url}`, {
       method: 'GET',
       headers: { ...this._headers },
