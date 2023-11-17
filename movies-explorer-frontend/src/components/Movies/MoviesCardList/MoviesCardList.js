@@ -47,7 +47,7 @@ function MoviesCardList({ list, device }) {
             .slice(0, visibleCards)
             .map((item) => <MoviesCard key={item.id} card={item} />)
         ) : (
-          <p>No movies to display</p>
+          <p className='movies-roster__no-films'>No movies to display</p>
         )}
       </ul>
       {!isSavedMoviesPage &&

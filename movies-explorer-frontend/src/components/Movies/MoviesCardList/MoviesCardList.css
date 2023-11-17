@@ -4,6 +4,9 @@
   flex-direction: column;
   margin: 0 40px;
 }
+.movies-roster__no-films {
+  color: #fff;
+}
 .movies-roster__net {
   padding: 0;
   width: 100%;
