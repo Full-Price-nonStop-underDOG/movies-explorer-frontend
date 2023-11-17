@@ -16,7 +16,7 @@ const Navigation = ({ device, isLoggedIn }) => {
   };
 
   useEffect(() => {
-    if (device === 'desktop') {
+    if (window.innerWidth > 768) {
       setDesktop(true);
       setMenuActive(false);
     } else {

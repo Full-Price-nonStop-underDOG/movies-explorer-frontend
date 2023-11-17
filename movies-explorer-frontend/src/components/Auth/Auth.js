@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Auth.css';
 import { Link } from 'react-router-dom';
 import FormValidation from '../FormValidation/FormValidation';
 import EntryField from '../EntryField/EntryField';
 
 const Auth = ({ isRegForm, onLogin, onRegister }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   // Используем useFormAndValidation для управления формой
   const { values, errors, isValid, handleChange, resetForm } = FormValidation();
 
   // Обработка отправки формы
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    if (isValid) {
-      resetForm();
-      isRegForm
-        ? onRegister(values.email, values.password, values.forename)
-        : onLogin(values.email, values.password);
+    if (isValid && !isLoading) {
+      setIsLoading(true);
+
+      try {
+        // Perform login or register
+        isRegForm
+          ? await onRegister(values.email, values.password, values.forename)
+          : await onLogin(values.email, values.password);
+
+        // Reset the form after a successful request
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle error if needed
+      }
+
+      // Enable form fields and button after 3 seconds
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
     } else {
-      // Если есть ошибки, делаем кнопку сабмита неактивной
-      // или выполняем другие действия в зависимости от вашей логики
+      // Handle invalid form or loading state
     }
   };
 
@@ -64,11 +79,9 @@ const Auth = ({ isRegForm, onLogin, onRegister }) => {
       <button
         type='submit'
         className={`form__submit ${
-          !isValid || Object.values(errors).some(Boolean)
-            ? 'form__submit_disabled'
-            : ''
+          !isValid || isLoading ? 'form__submit_disabled' : ''
         }`}
-        disabled={!isValid || Object.values(errors).some(Boolean)}
+        disabled={!isValid || isLoading}
       >
         {isRegForm ? 'Зарегистрироваться' : 'Войти'}
       </button>

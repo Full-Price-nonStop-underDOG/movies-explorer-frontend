@@ -10,8 +10,9 @@ import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 function MoviesCard({ card }) {
   const location = useLocation();
   const [isLiked, setLike] = useState(false);
-  const [isCardVisible, setCardVisibility] = useState(true); // Состояние видимости карточки
-  const { currentUserData } = useContext(CurrentUserContext);
+  const [isCardVisible, setCardVisibility] = useState(true);
+  const { currentUserData, setCurrentUserData } =
+    useContext(CurrentUserContext);
 
   useEffect(() => {
     if (currentUserData && currentUserData.savedMovies) {
@@ -21,6 +22,14 @@ function MoviesCard({ card }) {
       setLike(isCardSaved);
     }
   }, [currentUserData, card.id]);
+
+  useEffect(() => {
+    // Save liked state to local storage
+    localStorage.setItem(
+      'likedMovies',
+      JSON.stringify(currentUserData.savedMovies)
+    );
+  }, [currentUserData.savedMovies]);
 
   const handleOpenTrailer = () => {
     if (card.trailerLink) {
@@ -32,7 +41,6 @@ function MoviesCard({ card }) {
   const handleCardLike = () => {
     if (location.pathname === '/saved-movies') {
       handleDeleteMovie(card.id);
-
       setCardVisibility(false);
     } else if (!isLiked) {
       setLike(!isLiked);
@@ -41,6 +49,14 @@ function MoviesCard({ card }) {
       handleDeleteMovie(card.id);
       setLike(!isLiked);
     }
+
+    // Update context data
+    setCurrentUserData((prevUserData) => ({
+      ...prevUserData,
+      savedMovies: isLiked
+        ? prevUserData.savedMovies.filter((movieId) => movieId !== card.id)
+        : [...prevUserData.savedMovies, card.id],
+    }));
   };
 
   function getHoursFromMin(min) {

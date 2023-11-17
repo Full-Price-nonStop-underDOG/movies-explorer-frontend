@@ -45,6 +45,7 @@ function App() {
     () => {
       const handleWidth = () => {
         if (window.innerWidth > windowWidth.tablet) {
+          console.log('device', device);
           setDevice('desktop');
         } else if (window.innerWidth > windowWidth.mobile) {
           setDevice('tablet');
@@ -60,25 +61,43 @@ function App() {
     [device],
     []
   );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const results = await MoviesApi.makeGetRequest();
+
+        localStorage.setItem('allFilms', JSON.stringify(results));
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSearchForMovies = (keyword) => {
     return new Promise((resolve, reject) => {
       try {
-        MoviesApi.makeGetRequest().then((data) => {
-          const filteredMovies = data.reduce((filteredArray, movie) => {
-            const nameRuIncludesKeyword = movie.nameRU
-              .toLowerCase()
-              .includes(keyword.toLowerCase());
-            const nameEnIncludesKeyword = movie.nameEN
-              .toLowerCase()
-              .includes(keyword.toLowerCase());
-            if (nameRuIncludesKeyword || nameEnIncludesKeyword) {
-              return filteredArray.concat(movie);
-            }
-            return filteredArray;
-          }, []);
-          resolve(filteredMovies);
-        });
+        // Retrieve movies from local storage
+
+        const allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+
+        const filteredMovies = allFilms.reduce((filteredArray, movie) => {
+          const nameRuIncludesKeyword = movie.nameRU
+            .toLowerCase()
+            .includes(keyword.toLowerCase());
+          const nameEnIncludesKeyword = movie.nameEN
+            .toLowerCase()
+            .includes(keyword.toLowerCase());
+
+          if (nameRuIncludesKeyword || nameEnIncludesKeyword) {
+            return filteredArray.concat(movie);
+          }
+
+          return filteredArray;
+        }, []);
+
+        resolve(filteredMovies);
       } catch (error) {
         reject(error);
       }
@@ -97,17 +116,23 @@ function App() {
         console.log(error);
       });
   }
+
   const handleForSavedMovies = async () => {
     if (isLoggedIn) {
       try {
         const user = await api.getUserInfo();
         const savedMovies = user.savedMovies;
 
+        // Получить массив всех фильмов из локального хранилища
+        const allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+
+        // Фильтровать фильмы по сохраненным id
         const savedMoviesList = savedMovies.map((movieId) => {
-          return MoviesApi.getMovieById(movieId);
+          return allFilms.find((film) => film.id === movieId);
         });
 
-        const listOfMovies = await Promise.all(savedMoviesList);
+        // Удалить возможные undefined значения
+        const listOfMovies = savedMoviesList.filter((movie) => movie);
 
         return listOfMovies;
       } catch (error) {

@@ -60,9 +60,9 @@ function SearchForm({
   const handleChange = () => {
     const newChecked = !checked;
     setChecked(newChecked);
-
+    setIsLengthCheckboxSet(newChecked);
+    console.log(newChecked);
     if (location.pathname === '/movies') {
-      setIsLengthCheckboxSet(newChecked);
       localStorage.setItem('isLengthCheckboxSet', newChecked);
     }
   };

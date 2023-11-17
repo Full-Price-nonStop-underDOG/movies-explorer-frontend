@@ -27,7 +27,7 @@ const ProtectedRouteElement = ({
   }
 
   if (!isLoggedIn) {
-    return <Navigate to='/signin' />;
+    return <Navigate to='/' />;
   }
 
   return <Component {...props} />;

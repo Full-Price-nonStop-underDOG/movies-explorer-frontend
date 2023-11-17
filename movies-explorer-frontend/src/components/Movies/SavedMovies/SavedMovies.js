@@ -11,7 +11,7 @@ import './SavedMovies.css';
 
 function SavedMovies({ device }) {
   const [filteredMovies, setFilteredMovies] = useState([]);
-  const [isLengthCheckboxSet, setIsLengthCheckboxSet] = useState(false);
+  const [isLengthCheckboxSet, setIsLengthCheckboxSet] = useState(true);
 
   const movies = useLoaderData();
 
@@ -24,6 +24,17 @@ function SavedMovies({ device }) {
     return visibleMovies;
   };
 
+  const filterMoviesByLength = (movies) => {
+    return movies.filter((movie) => movie.duration <= 40);
+  };
+
+  // Apply length filter if the checkbox is set
+  const moviesToDisplay = !isLengthCheckboxSet
+    ? filterMoviesByLength(filteredMovies.length > 0 ? filteredMovies : movies)
+    : filteredMovies.length > 0
+    ? filteredMovies
+    : movies;
+
   return (
     <>
       <Header device={device} />
@@ -33,9 +44,7 @@ function SavedMovies({ device }) {
           searchMovies={setFilteredMovies}
           setIsLengthCheckboxSet={setIsLengthCheckboxSet}
         />
-        <MoviesCardList
-          list={filteredMovies.length > 0 ? filteredMovies : movies}
-        />
+        <MoviesCardList list={moviesToDisplay} />
       </main>
       <Footer />
     </>
