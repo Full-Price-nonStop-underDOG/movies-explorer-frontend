@@ -1,21 +1,21 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
+import { useUserData } from '../../../hooks/useUserData';
 import {
   handleSaveMovie,
   handleDeleteMovie,
 } from '../../../utils/likeFunctionality';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
-function MoviesCard({ card }) {
+function MoviesCard({ card, currentUserData, setCurrentUserData }) {
   const location = useLocation();
   const [isLiked, setLike] = useState(false);
   const [isCardVisible, setCardVisibility] = useState(true);
-  const { currentUserData, setCurrentUserData } =
-    useContext(CurrentUserContext);
 
   useEffect(() => {
     if (currentUserData && currentUserData.savedMovies) {
+      console.log('сука');
       const isCardSaved = currentUserData.savedMovies.some(
         (savedMovie) => savedMovie === card.id
       );
@@ -25,6 +25,7 @@ function MoviesCard({ card }) {
 
   useEffect(() => {
     // Save liked state to local storage
+    console.log('шо');
     localStorage.setItem(
       'likedMovies',
       JSON.stringify(currentUserData.savedMovies)

@@ -1,6 +1,6 @@
 export const windowWidth = {
   tablet: 1251,
-  mobile: 768,
+  mobile: 709,
 };
 
 export const elemenetsApi = {
@@ -11,11 +11,11 @@ export const elemenetsApi = {
 };
 
 // export const elemenetsApi = {
-//   headers: {
+//    headers: {
 //     'Content-Type': 'application/json',
-//   },
-//   URL: 'http://localhost:3001',
-// };
+//    },
+//    URL: 'http://localhost:3001',
+//  };
 
 export const moviesApi = {
   headers: {

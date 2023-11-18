@@ -61,47 +61,62 @@ function App() {
     [device],
     []
   );
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const results = await MoviesApi.makeGetRequest();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const results = await MoviesApi.makeGetRequest();
 
-        localStorage.setItem('allFilms', JSON.stringify(results));
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
+  //       localStorage.setItem('allFilms', JSON.stringify(results));
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error.message);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [isLoggedIn]);
+
+  const fetchData = async () => {
+    try {
+      const results = await MoviesApi.makeGetRequest();
+
+      localStorage.setItem('allFilms', JSON.stringify(results));
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
+  };
+
+  const handleSearchForMovies = async (keyword) => {
+    try {
+      // Retrieve movies from local storage
+      let allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+
+      // If there are no saved films, fetch data
+      if (allFilms.length === 0) {
+        await fetchData();
+        // Retrieve movies again after fetching
+        allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
       }
-    };
 
-    fetchData();
-  }, []);
+      const filteredMovies = allFilms.reduce((filteredArray, movie) => {
+        const nameRuIncludesKeyword = movie.nameRU
+          .toLowerCase()
+          .includes(keyword.toLowerCase());
+        const nameEnIncludesKeyword = movie.nameEN
+          .toLowerCase()
+          .includes(keyword.toLowerCase());
 
-  const handleSearchForMovies = (keyword) => {
-    return new Promise((resolve, reject) => {
-      try {
-        // Retrieve movies from local storage
+        if (nameRuIncludesKeyword || nameEnIncludesKeyword) {
+          return filteredArray.concat(movie);
+        }
 
-        const allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+        return filteredArray;
+      }, []);
 
-        const filteredMovies = allFilms.reduce((filteredArray, movie) => {
-          const nameRuIncludesKeyword = movie.nameRU
-            .toLowerCase()
-            .includes(keyword.toLowerCase());
-          const nameEnIncludesKeyword = movie.nameEN
-            .toLowerCase()
-            .includes(keyword.toLowerCase());
-
-          if (nameRuIncludesKeyword || nameEnIncludesKeyword) {
-            return filteredArray.concat(movie);
-          }
-
-          return filteredArray;
-        }, []);
-
-        resolve(filteredMovies);
-      } catch (error) {
-        reject(error);
-      }
-    });
+      return filteredMovies;
+    } catch (error) {
+      console.error('Error handling search for movies:', error.message);
+      throw error;
+    }
   };
 
   function handleUpdateUser(userData) {
@@ -120,11 +135,18 @@ function App() {
   const handleForSavedMovies = async () => {
     if (isLoggedIn) {
       try {
-        const user = await api.getUserInfo();
-        const savedMovies = user.savedMovies;
-
         // Получить массив всех фильмов из локального хранилища
-        const allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+        let allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+
+        // Если нет сохраненных фильмов, выполнить запрос на получение данных
+        if (allFilms.length === 0) {
+          await fetchData();
+          // Получить фильмы после выполнения fetchData
+          allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+        }
+
+        const user = await api.getUserInfo();
+        const savedMovies = currentUserData.savedMovies;
 
         // Фильтровать фильмы по сохраненным id
         const savedMoviesList = savedMovies.map((movieId) => {
@@ -133,6 +155,8 @@ function App() {
 
         // Удалить возможные undefined значения
         const listOfMovies = savedMoviesList.filter((movie) => movie);
+
+        // Очистить локальное хранилище после обработки массива
 
         return listOfMovies;
       } catch (error) {
@@ -149,6 +173,7 @@ function App() {
         <Route path='/' element={<Main device={device} />} />
         <Route
           path='/movies'
+          loader={handleForSavedMovies}
           element={
             <ProtectedRouteElement
               isLoading={isLoading}

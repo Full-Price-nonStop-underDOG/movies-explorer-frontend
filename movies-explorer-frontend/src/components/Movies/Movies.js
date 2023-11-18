@@ -8,7 +8,7 @@ import './Movies.css';
 
 function Movies({ device, handleSearchForMovies }) {
   const [searchResults, setSearchResults] = useState([]);
-  const [isLengthCheckboxSet, setIsLengthCheckboxSet] = useState(false);
+  const [isLengthCheckboxSet, setIsLengthCheckboxSet] = useState(true);
 
   // Функция для фильтрации фильмов по длине (duration <= 40)
   const filterMoviesByLength = (movies) => {
@@ -22,7 +22,16 @@ function Movies({ device, handleSearchForMovies }) {
   useEffect(() => {
     const isLengthCheckboxSetFromLocalStorage =
       localStorage.getItem('isLengthCheckboxSet') === 'true';
-    setIsLengthCheckboxSet(isLengthCheckboxSetFromLocalStorage);
+
+    // Добавляем проверку наличия сохраненного контента в локальном хранилище
+    const localStorageContentExists =
+      localStorage.getItem('isLengthCheckboxSet') !== null;
+
+    if (localStorageContentExists) {
+      setIsLengthCheckboxSet(isLengthCheckboxSetFromLocalStorage);
+    } else {
+      setIsLengthCheckboxSet(true);
+    }
   }, []);
 
   return (

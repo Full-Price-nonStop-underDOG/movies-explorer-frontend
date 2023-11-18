@@ -27,7 +27,9 @@ function SearchForm({
 
       if (isMounted) {
         setSearchKeyword(storedSearchKeyword || '');
-        setChecked(storedCheckboxStatus === 'true');
+        if (storedCheckboxStatus !== null) {
+          setChecked(storedCheckboxStatus === 'true');
+        }
 
         if (storedSearchKeyword && storedSearchKeyword.trim() !== '') {
           // Check if searchResults are already present in local storage
@@ -61,6 +63,7 @@ function SearchForm({
     const newChecked = !checked;
     setChecked(newChecked);
     setIsLengthCheckboxSet(newChecked);
+    console.log(newChecked, 'everv');
     console.log(newChecked);
     if (location.pathname === '/movies') {
       localStorage.setItem('isLengthCheckboxSet', newChecked);
@@ -96,7 +99,10 @@ function SearchForm({
         console.error('Ошибка при загрузке данных:', error);
         setError('Произошла ошибка при загрузке данных');
       } finally {
-        setIsLoading(false);
+        // Добавляем задержку перед сбросом isLoading в false
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500); // Измените время задержки по вашему усмотрению
       }
     }
   };

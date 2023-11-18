@@ -12,7 +12,6 @@ const ProtectedRouteElement = ({
   isLoading,
   ...props
 }) => {
-  console.log(isLoggedIn);
   useEffect(() => {
     const checkLoggedIn = async () => {
       // Ваши проверки авторизации здесь

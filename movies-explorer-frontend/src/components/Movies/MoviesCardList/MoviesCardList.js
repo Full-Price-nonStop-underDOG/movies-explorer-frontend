@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 import { useLocation } from 'react-router-dom';
+import { useUserData } from '../../../hooks/useUserData';
 
 function MoviesCardList({ list, device }) {
   const location = useLocation();
@@ -10,6 +11,7 @@ function MoviesCardList({ list, device }) {
   const [visibleCards, setVisibleCards] = useState(4);
   const [initialVisibleCards, setInitialVisibleCards] = useState(4);
   const [newVisibleCards, setNewVisibleCards] = useState(3);
+  const { currentUserData, setCurrentUserData } = useUserData();
 
   const handleResize = () => {
     if (device === 'desktop') {
@@ -45,7 +47,14 @@ function MoviesCardList({ list, device }) {
         {list && list.length > 0 ? (
           list
             .slice(0, visibleCards)
-            .map((item) => <MoviesCard key={item.id} card={item} />)
+            .map((item) => (
+              <MoviesCard
+                key={item.id}
+                card={item}
+                currentUserData={currentUserData}
+                setCurrentUserData={setCurrentUserData}
+              />
+            ))
         ) : (
           <p className='movies-roster__no-films'>No movies to display</p>
         )}
