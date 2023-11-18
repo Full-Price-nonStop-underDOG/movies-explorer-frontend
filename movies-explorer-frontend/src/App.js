@@ -146,7 +146,7 @@ function App() {
         }
 
         const user = await api.getUserInfo();
-        const savedMovies = currentUserData.savedMovies;
+        const savedMovies = user.savedMovies;
 
         // Фильтровать фильмы по сохраненным id
         const savedMoviesList = savedMovies.map((movieId) => {
