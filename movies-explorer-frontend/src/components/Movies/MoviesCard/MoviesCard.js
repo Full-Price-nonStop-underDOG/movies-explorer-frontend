@@ -14,18 +14,8 @@ function MoviesCard({ card, currentUserData, setCurrentUserData }) {
   const [isCardVisible, setCardVisibility] = useState(true);
 
   useEffect(() => {
-    if (currentUserData && currentUserData.savedMovies) {
-      console.log('сука');
-      const isCardSaved = currentUserData.savedMovies.some(
-        (savedMovie) => savedMovie === card.id
-      );
-      setLike(isCardSaved);
-    }
-  }, [currentUserData, card.id]);
-
-  useEffect(() => {
     // Save liked state to local storage
-    console.log('шо');
+
     localStorage.setItem(
       'likedMovies',
       JSON.stringify(currentUserData.savedMovies)
@@ -41,13 +31,13 @@ function MoviesCard({ card, currentUserData, setCurrentUserData }) {
 
   const handleCardLike = () => {
     if (location.pathname === '/saved-movies') {
-      handleDeleteMovie(card.id);
+      handleDeleteMovie(card);
       setCardVisibility(false);
     } else if (!isLiked) {
       setLike(!isLiked);
-      handleSaveMovie(card.id);
+      handleSaveMovie(card);
     } else {
-      handleDeleteMovie(card.id);
+      handleDeleteMovie(card);
       setLike(!isLiked);
     }
 
@@ -55,8 +45,8 @@ function MoviesCard({ card, currentUserData, setCurrentUserData }) {
     setCurrentUserData((prevUserData) => ({
       ...prevUserData,
       savedMovies: isLiked
-        ? prevUserData.savedMovies.filter((movieId) => movieId !== card.id)
-        : [...prevUserData.savedMovies, card.id],
+        ? prevUserData.savedMovies.filter((movie) => movie !== card)
+        : [...prevUserData.savedMovies, card],
     }));
   };
 
@@ -65,6 +55,17 @@ function MoviesCard({ card, currentUserData, setCurrentUserData }) {
     let minutes = min % 60;
     return `${hours}ч ${minutes}м`;
   }
+  useEffect(() => {
+    if (currentUserData && currentUserData.savedMovies) {
+      console.log(card, currentUserData.savedMovies);
+      const isCardSaved = currentUserData.savedMovies.some(
+        (savedMovie) => savedMovie.id === card.id
+      );
+      console.log(isCardSaved);
+
+      setLike(isCardSaved);
+    }
+  }, [handleCardLike]);
 
   const absoluteImageUrl = `https://api.nomoreparties.co${card.image.url}`;
 

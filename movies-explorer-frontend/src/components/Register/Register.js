@@ -1,16 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Auth from '../Auth/Auth';
 import '../Login/Login.css';
-import { useLogin } from '../../hooks/useLogin';
 import { useRegister } from '../../hooks/useRegister';
-import { useEffect } from 'react';
 
 const Register = ({ isLoggedIn }) => {
   const navigate = useNavigate();
-  // const { login } = useLogin();
-  const login = () => {};
-  const { handleRegister } = useRegister();
+  const { handleRegister, error, isErrorVisible } = useRegister();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -20,11 +16,12 @@ const Register = ({ isLoggedIn }) => {
 
   return (
     <section className='login'>
-      <href onClick={() => navigate('/')} className='login__logo'></href>
+      <a href='/' onClick={() => navigate('/')} className='login__logo'></a>
       <h1 className='login__title'>Добро пожаловать!</h1>
+      {error && <p className='login__error'>{error}</p>}
       <Auth
         isRegForm
-        onLogin={login}
+        onLogin={() => {}}
         onRegister={(email, password, forename) =>
           handleRegister(email, password, forename)
         }

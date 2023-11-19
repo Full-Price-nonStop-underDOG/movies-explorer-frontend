@@ -1,10 +1,10 @@
 import api from './MainApi';
-export const handleSaveMovie = (id) => {
+export const handleSaveMovie = (card) => {
   api
-    .addLike(id)
+    .addLike(card)
 
     .catch((error) => {
-      console.log(error, '401 — токен не передан');
+      console.log(error);
     });
 };
 

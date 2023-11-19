@@ -136,29 +136,29 @@ function App() {
     if (isLoggedIn) {
       try {
         // Получить массив всех фильмов из локального хранилища
-        let allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+        // let allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
 
-        // Если нет сохраненных фильмов, выполнить запрос на получение данных
-        if (allFilms.length === 0) {
-          await fetchData();
-          // Получить фильмы после выполнения fetchData
-          allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
-        }
+        // // Если нет сохраненных фильмов, выполнить запрос на получение данных
+        // if (allFilms.length === 0) {
+        //   await fetchData();
+        //   // Получить фильмы после выполнения fetchData
+        //   allFilms = JSON.parse(localStorage.getItem('allFilms')) || [];
+        // }
 
         const user = await api.getUserInfo();
         const savedMovies = user.savedMovies;
 
         // Фильтровать фильмы по сохраненным id
-        const savedMoviesList = savedMovies.map((movieId) => {
-          return allFilms.find((film) => film.id === movieId);
-        });
+        // const savedMoviesList = savedMovies.map((movieId) => {
+        //   return allFilms.find((film) => film.id === movieId);
+        // });
 
-        // Удалить возможные undefined значения
-        const listOfMovies = savedMoviesList.filter((movie) => movie);
+        // // Удалить возможные undefined значения
+        // const listOfMovies = savedMoviesList.filter((movie) => movie);
 
         // Очистить локальное хранилище после обработки массива
 
-        return listOfMovies;
+        return savedMovies;
       } catch (error) {
         console.error('Error in handleForSavedMovies:', error);
         throw error; // Перебросить ошибку для дальнейшей обработки

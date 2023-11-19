@@ -10,26 +10,26 @@ class MainApi {
     } else throw new Error('ошибка');
   }
 
-  async addLike(movieId) {
-    console.log('add like', movieId);
+  async addLike(card) {
+    console.log('add like', card);
     const response = await fetch(`${this._url}/users/me`, {
       method: 'PUT',
       headers: { ...this._headers },
       credentials: 'include',
       body: JSON.stringify({
-        movieId: movieId,
+        card: card,
       }),
     });
     return this._handlePromiseRequest(response);
   }
 
-  async removeLike(movieId) {
+  async removeLike(card) {
     const response = await fetch(`${this._url}/users/me`, {
       method: 'DELETE',
       headers: { ...this._headers },
       credentials: 'include',
       body: JSON.stringify({
-        movieId: movieId,
+        card: card,
       }),
     });
 

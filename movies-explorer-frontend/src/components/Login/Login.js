@@ -7,7 +7,7 @@ import { useRegister } from '../../hooks/useRegister';
 
 const Login = ({ isLoggedIn }) => {
   const navigate = useNavigate();
-  const { handleLogin } = useLogin();
+  const { handleLogin, error } = useLogin();
   const { register } = useRegister();
 
   // Если пользователь авторизован, перенаправляем его на главную страницу
@@ -16,10 +16,12 @@ const Login = ({ isLoggedIn }) => {
       navigate('/');
     }
   }, [isLoggedIn, navigate]);
+
   return (
     <main className='login'>
-      <href onClick={() => navigate('/')} className='login__logo'></href>
+      <a href='/' className='login__logo'></a>
       <h1 className='login__title'>Рады видеть!</h1>
+      {error && <p className='login__error'>{error}</p>}
       <Auth
         isRegForm={false}
         onLogin={(email, password) => handleLogin(email, password)}

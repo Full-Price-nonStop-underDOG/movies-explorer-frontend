@@ -8,7 +8,17 @@ class Api {
   _handlePromiseRequest(res) {
     if (res.ok) {
       return res.json();
-    } else throw new Error('ошибка');
+    } else {
+      return res.json().then((data) => {
+        const error = new Error(
+          `Request failed with status ${res.status}: ${
+            data.message || res.statusText
+          }`
+        );
+        error.response = res; // Attach the response to the error object for additional information
+        throw error;
+      });
+    }
   }
 
   async register(email, password, forename) {

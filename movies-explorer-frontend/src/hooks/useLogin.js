@@ -7,6 +7,8 @@ import { useUserContext } from '../components/UserProvider/UserProvider';
 export function useLogin() {
   const { setIsLoggedIn, isLoggedIn } = useUserContext();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [isErrorVisible, setIsErrorVisible] = useState(false);
 
   async function handleLogin(email, password) {
     try {
@@ -17,15 +19,25 @@ export function useLogin() {
       console.log('я еду в /movies');
       navigate('/movies', { replace: true });
     } catch (err) {
-      if (err.status === 400) {
-        console.log('400 - не передано одно из полей');
-      } else if (err.status === 401) {
-        console.log('401 - пользователя с данным email не сущетсвует');
+      if (err.response && err.response.status === 401) {
+        setError('Неправильная почта или пароль');
+      } else {
+        setError('Произошла ошибка при входе, Неправильная почта или пароль');
       }
+      setIsErrorVisible(true);
+
+      setTimeout(() => {
+        setIsErrorVisible(false);
+        setError(null);
+      }, 5000);
+
+      console.error(err);
     }
   }
 
   return {
     handleLogin,
+    error,
+    isErrorVisible,
   };
 }

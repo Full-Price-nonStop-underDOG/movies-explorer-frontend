@@ -3,19 +3,19 @@ export const windowWidth = {
   mobile: 709,
 };
 
+// export const elemenetsApi = {
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   URL: 'https://api.filmloverbtwwhynot.nomoredomainsrocks.ru',
+// };
+
 export const elemenetsApi = {
   headers: {
     'Content-Type': 'application/json',
   },
-  URL: 'https://api.filmloverbtwwhynot.nomoredomainsrocks.ru',
+  URL: 'http://localhost:3001',
 };
-
-// export const elemenetsApi = {
-//    headers: {
-//     'Content-Type': 'application/json',
-//    },
-//    URL: 'http://localhost:3001',
-//  };
 
 export const moviesApi = {
   headers: {
