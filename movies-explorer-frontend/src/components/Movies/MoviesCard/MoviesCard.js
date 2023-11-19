@@ -15,7 +15,6 @@ function MoviesCard({ card, currentUserData, setCurrentUserData }) {
 
   useEffect(() => {
     // Save liked state to local storage
-
     localStorage.setItem(
       'likedMovies',
       JSON.stringify(currentUserData.savedMovies)
@@ -30,24 +29,41 @@ function MoviesCard({ card, currentUserData, setCurrentUserData }) {
   };
 
   const handleCardLike = () => {
-    if (location.pathname === '/saved-movies') {
-      handleDeleteMovie(card);
-      setCardVisibility(false);
-    } else if (!isLiked) {
-      setLike(!isLiked);
-      handleSaveMovie(card);
-    } else {
-      handleDeleteMovie(card);
-      setLike(!isLiked);
-    }
+    setLike((prevIsLiked) => {
+      const newIsLiked = !prevIsLiked;
 
-    // Update context data
-    setCurrentUserData((prevUserData) => ({
-      ...prevUserData,
-      savedMovies: isLiked
-        ? prevUserData.savedMovies.filter((movie) => movie !== card)
-        : [...prevUserData.savedMovies, card],
-    }));
+      if (location.pathname === '/saved-movies') {
+        handleDeleteMovie(card);
+        setCardVisibility(false);
+      } else if (!prevIsLiked) {
+        handleSaveMovie(card);
+      } else {
+        handleDeleteMovie(card);
+      }
+
+      // Update context data
+      setCurrentUserData((prevUserData) => {
+        const isPrevLiked = prevIsLiked;
+
+        // If prevIsLiked is true, remove the card from the array
+        if (isPrevLiked) {
+          return {
+            ...prevUserData,
+            savedMovies: prevUserData.savedMovies.filter(
+              (movie) => movie.id !== card.id
+            ),
+          };
+        } else {
+          // If prevIsLiked is false, add the card to the array
+          return {
+            ...prevUserData,
+            savedMovies: [...prevUserData.savedMovies, card],
+          };
+        }
+      });
+
+      return newIsLiked;
+    });
   };
 
   function getHoursFromMin(min) {
@@ -55,17 +71,22 @@ function MoviesCard({ card, currentUserData, setCurrentUserData }) {
     let minutes = min % 60;
     return `${hours}ч ${minutes}м`;
   }
+
+  useEffect(() => {
+    localStorage.setItem(
+      'likedMovies',
+      JSON.stringify(currentUserData.savedMovies)
+    );
+  }, []);
+
   useEffect(() => {
     if (currentUserData && currentUserData.savedMovies) {
-      console.log(card, currentUserData.savedMovies);
       const isCardSaved = currentUserData.savedMovies.some(
         (savedMovie) => savedMovie.id === card.id
       );
-      console.log(isCardSaved);
-
       setLike(isCardSaved);
     }
-  }, [handleCardLike]);
+  }, [card, currentUserData, isLiked]);
 
   const absoluteImageUrl = `https://api.nomoreparties.co${card.image.url}`;
 
