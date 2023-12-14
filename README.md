@@ -1,14 +1,14 @@
-# movies-explorer-frontend
-макет: https://www.figma.com/file/6FMWkB94wE7KTkcCgUXtnC/%D0%94%D0%B8%D0%BF%D0%BB%D0%BE%D0%BC%D0%BD%D1%8B%D0%B9-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82?type=design&node-id=1-7266&mode=dev
-pull-request: https://github.com/Full-Price-nonStop-underDOG/movies-explorer-frontend/pull/2
-сайт: https://filmloverbtwwhynot.nomoredomainsrocks.ru/
+This is a service where you can search for movies on demand and save them in your personal account.
 
+Here's what was done:
 
-По поводу замечаний, я просто не знаю как еще вам написать(
-
-Мне написал наставник(он вроде бы связывался с вами или с кем-то еще из ревью, не знаю): Присылай работу, только прикрепи актуальный архив. Пока что архив старый. 
-По поводу решения, если в целом функциональность работает ок, то пускай остается твоя реализация.
-
-Кроме этого исправил пункт про то, что запрос к базе данных с фильмами должен отправляться при первом сабмите в роуте movies. И из хороших практик сделал единственное, что было не сделано - это показ ошибки если от сервера приходит ошибка при логине и тд.
-
-По-другому реализована функцмональность с постановкой лайка, но работает так же) у меня закончились переходы в другие когорты очень надеюсь, что моих исправлений хватит на то, чтобы набрать 80 баллов.....
+set up infrastructure and created Express server;
+connected database, created API schemas and resource models;
+implemented logging, authentication and authorization on the server;
+the backend was deployed on Yandex Сloud;
+components made up in React, markup was ported to the React format;
+described the logic and layout of registration, login, profile editing, and saved movies pages;
+asynchronous GET- and POST-requests to the API were implemented;
+authorized and unauthorized states, saving movies in the profile were worked out;
+received movies are filtered on the client side.
+Tools and stack: #HTML #CSS #React #Express #MongoDB #NodeJS #API #Nginx #JWT #Postman
