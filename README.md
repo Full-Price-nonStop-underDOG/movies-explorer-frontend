@@ -1,14 +1,13 @@
-This is a service where you can search for movies on demand and save them in your personal account.
+This service allows users to search for movies on demand and save them in their personal accounts. Here's a summary of what was accomplished:
 
-Here's what was done:
-
-<br>set up infrastructure and created Express server;
-<br>connected database, created API schemas and resource models;
-<br>implemented logging, authentication and authorization on the server;
-<br>the backend was deployed on Yandex Сloud;
-<br>components made up in React, markup was ported to the React format;
-<br>described the logic and layout of registration, login, profile editing, and saved movies pages;
-<br>asynchronous GET- and POST-requests to the API were implemented;
-<br>authorized and unauthorized states, saving movies in the profile were worked out;
-<br>received movies are filtered on the client side.
-<br>Tools and stack: #HTML #CSS #React #Express #MongoDB #NodeJS #API #Nginx #JWT #Postman
+Set up infrastructure and created an Express server.
+Connected a database, created API schemas, and resource models.
+Implemented logging, authentication, and authorization on the server.
+Deployed the backend on Yandex Cloud.
+Composed components in React, and the markup was adapted to the React format.
+Described the logic and layout for registration, login, profile editing, and saved movies pages.
+Implemented asynchronous GET- and POST-requests to the API.
+Worked on both authorized and unauthorized states, including the functionality of saving movies in the user's profile.
+Implemented client-side filtering of received movies.
+Tools and Stack:
+#HTML #CSS #React #Express #MongoDB #NodeJS #API #Nginx #JWT #Postman
